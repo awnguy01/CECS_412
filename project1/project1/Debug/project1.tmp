@@ -1,0 +1,33 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.7</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\Debug\project1.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>project1.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>project1.map</FILE>
+  <FILE>project1.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <start><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\main.asm</FILE><LINE>10</LINE></start>
+  <negative><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\main.asm</FILE><LINE>27</LINE></negative>
+  <continue><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\main.asm</FILE><LINE>31</LINE></continue>
+  <do><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\main.asm</FILE><LINE>35</LINE></do>
+  <until><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\main.asm</FILE><LINE>39</LINE></until>
+  <for><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\main.asm</FILE><LINE>42</LINE></for>
+  <next><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\project1\project1\main.asm</FILE><LINE>45</LINE></next>
+ </LABELS>
+</ASSEMBLER_INFO>
