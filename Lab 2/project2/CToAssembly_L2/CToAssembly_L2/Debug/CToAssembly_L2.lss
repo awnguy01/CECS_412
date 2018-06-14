@@ -127,12 +127,6 @@ Disassembly of section .text:
   9e:	b0 cf       	rjmp	.-160    	; 0x0 <__vectors>
 
 000000a0 <main>:
-unsigned char Global_A; 
-unsigned char Global_B = 1; 
-unsigned char Global_C = 2;
-
-void main(void) { 
-	Global_A = Global_C % Global_B; 
   a0:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <Global_C>
   a4:	60 91 01 01 	lds	r22, 0x0101	; 0x800101 <Global_B>
   a8:	03 d0       	rcall	.+6      	; 0xb0 <__udivmodqi4>
