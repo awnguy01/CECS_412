@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\NestedSubroutines_L2\NestedSubroutines_L2\main.asm Thu Jun 14 00:54:47 2018
+AVRASM ver. 2.2.7  C:\Users\andre\Documents\A NGUYEN VO\UofL Summer 2018\CECS 412\Lab 2\project2\NestedSubroutines_L2\NestedSubroutines_L2\main.asm Thu Jun 14 10:06:43 2018
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc'
@@ -993,19 +993,19 @@ AVRASM ver. 2.2.7  C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\NestedSubr
                                   ;******************************  
                                   ;* Declare Variables  
                                   ;******************************    
-                                 			.dseg    
+                                 			.dseg					;directive to specify data segment in SRAM
                                  			.org	0x100			;originate data storage at address 0x100  
 000100                           quotient:	.byte	1				;uninitialized quotient variable stored in SRAM aka data segment  
 000101                           remainder:	.byte	1				;uninitialized remainder variable stored in SRAM    
                                  			.set	count = 0		;initialized count variable stored in SRAM  
                                  ;******************************    
-                                 			.cseg					; Declare and Initialize Constants (modify them for different results)    
+                                 			.cseg					;Declare and Initialize Constants (modify them for different results)    
                                  			.equ	dividend = 13	;8-bit dividend constant (positive integer) stored in FLASH memory aka code segment    
                                  			.equ	divisor = 3		;8-bit divisor constant (positive integer) stored in FLASH memory  
                                  ;******************************  
                                  ;* Vector Table (partial)  
                                  ;******************************   
-                                 			.org	0x0 
+                                 			.org	0x0				;sets origin of code segment in FLASH memory at 0x0
 000000 940c 0100                 reset:		jmp		main			;RESET Vector at address 0x0 in FLASH memory (handled by MAIN) 
 000002 940c 013d                 int0v:		jmp		int0h			;External interrupt vector at address 0x2 in Flash memory (handled by int0)  
                                  ;******************************		
@@ -1013,47 +1013,46 @@ AVRASM ver. 2.2.7  C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\NestedSubr
                                  ;******************************    
                                  			.org	0x100			;originate MAIN at address 0x100 in FLASH memory (step through the code)  
 000100 940e 0104                 main:		call	init			;initialize variables subroutine, set break point here, check the STACK,SP,PC   
-                                 
 000102 940c 0102                 endmain:	jmp		endmain
 000104 9000 0000                 init:		lds		r0,count		;get initial count, set break point here and check the STACK,SP,PC   
 000106 9200 0100                 			sts		quotient,r0		;use the same r0 value to clear the quotient-   
 000108 9200 0101                 			sts		remainder,r0	;and the remainder storage locations
-00010a 940e 010d                 			call	getnums 
+00010a 940e 010d                 			call	getnums			;calls the subroutine getnums:
 00010c 9508                      			ret						;return from subroutine, check the STACK,SP,PC here. 
 00010d e0ed                      getnums:	ldi		r30,dividend	;Check the STACK,SP,PC here.   
-00010e e0f3                      			ldi		r31,divisor
-00010f 940e 0112                 			call	test
+00010e e0f3                      			ldi		r31,divisor		;loads r31 with the value specified by the symbol divisor
+00010f 940e 0112                 			call	test			;calls the subroutine test
 000111 9508                      			ret						;Check the STACK,SP,PC here. 
 000112 30e0                      test:		cpi		r30,0			; is dividend == 0 ?   
-000113 f411                      			brne	test2
+000113 f411                      			brne	test2			;if the value in r30 is not 0, branch to test2:
 000114 940c 0114                 test1:		jmp		test1			; halt program, output = 0 quotient and 0 remainder 
 000116 30f0                      test2:		cpi		r31,0			; is divisor == 0 ?   
-000117 f439                      			brne	test4
+000117 f439                      			brne	test4			;if the value in r31 is not 0, branch to test4:
 000118 eeee                      			ldi		r30,0xEE		; set output to all EE's = Error division by 0   
-000119 93e0 0100                 			sts		quotient,r30
-00011b 93e0 0101                 			sts		remainder,r30
+000119 93e0 0100                 			sts		quotient,r30	;stores the value in r30 into the variable specified by quotient
+00011b 93e0 0101                 			sts		remainder,r30	;stores the value of r30 into the variable specified by remainder
 00011d 940c 011d                 test3:		jmp		test3			; halt program, look at output 
 00011f 17ef                      test4:		cp		r30,r31			; is dividend == divisor ?   
-000120 f429                      			brne	test6
+000120 f429                      			brne	test6			;if the values in r30 and r31 are not the same, branch to test6:
 000121 e0e1                      			ldi		r30,1			;then set output accordingly   
-000122 93e0 0100                 			sts		quotient,r30
+000122 93e0 0100                 			sts		quotient,r30	;stores the value of r30 in the variable specified by quotient
 000124 940c 0124                 test5:		jmp		test5			; halt program, look at output 
 000126 f43a                      test6:		brpl	test8			; is dividend < divisor ?   
-000127 efef                      			ser		r30         
-000128 93e0 0100                 			sts		quotient,r30
+000127 efef                      			ser		r30				; sets all the bits in r30
+000128 93e0 0100                 			sts		quotient,r30	; stores the value of r30 in the variable specified by quotient
 00012a 93e0 0101                 			sts		remainder,r30	; set output to all FF's = not solving Fractions in this program 
 00012c 940c 012c                 test7:		jmp		test7			; halt program look at output 
-00012e 940e 0131                 test8:		call	divide
+00012e 940e 0131                 test8:		call	divide			;calls the subroutine divide:
 000130 9508                      			ret						; otherwise, return to do positive integer division 
-000131 9000 0000                 divide:		lds		r0,count		;student comment goes here 
-000133 9403                      divide1:	inc		r0				;student comment goes here   
-000134 1bef                      			sub		r30,r31			;student comment goes here   
-000135 f7ea                      			brpl	divide1			;student comment goes here   
-000136 940a                      			dec		r0				;student comment goes here   
-000137 0fef                      			add		r30,r31			;student comment goes here   
-000138 9200 0100                 			sts		quotient,r0		;student comment goes here   
-00013a 93e0 0101                 			sts		remainder,r30	;student comment goes here 
-00013c 9508                      divide2:	ret						;student comment goes here      
+000131 9000 0000                 divide:		lds		r0,count		;loads r0 with the value specified by the symbol count
+000133 9403                      divide1:	inc		r0				;increments the value of 30 by 1
+000134 1bef                      			sub		r30,r31			;subtracts the value in r30 by the value in r31 and stores in r30
+000135 f7ea                      			brpl	divide1			;if negative flag is not set by the subtraction, loop back to divide1:
+000136 940a                      			dec		r0				;else decrement r0 by 1
+000137 0fef                      			add		r30,r31			;add the value in r30 with the value in r31   
+000138 9200 0100                 			sts		quotient,r0		;stores the value of r0 in the variable specified by quotient
+00013a 93e0 0101                 			sts		remainder,r30	;stores the value of r30 in the variable specified by remainder
+00013c 9508                      divide2:	ret						;return from this nested subroutine
 00013d 940c 013d                 int0h:		jmp		int0h			; interrupt 0 handler goes here 
 
 

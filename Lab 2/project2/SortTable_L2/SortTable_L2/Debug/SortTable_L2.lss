@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\SortTable_L2\SortTable_L2\main.asm Thu Jun 14 00:53:38 2018
+AVRASM ver. 2.2.7  C:\Users\andre\Documents\A NGUYEN VO\UofL Summer 2018\CECS 412\Lab 2\project2\SortTable_L2\SortTable_L2\main.asm Thu Jun 14 10:15:07 2018
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc'
@@ -1035,16 +1035,16 @@ AVRASM ver. 2.2.7  C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\SortTable_
 000025 9111                      			ld		r17,Z+				; loads into r17 the new value pointed to by the Z-register and post-increments Z by 1
 000026 940c 001a                 			jmp		compare				; loops back to compare:
                                  	
-000028 0c34
-000029 2d55
-00002a 3e09
-00002b 0403
-00002c 0158
-00002d 0414
-00002e 020d
-00002f 0233
-000030 064f
-000031 1305                      table:  	.db		52,12,85,45,9,62,3,4,88,1,20,4,13,02,51,02,79,6,5,19
+000028 5f57
+000029 1736
+00002a 044d
+00002b 2f22
+00002c 5936
+00002d 0906
+00002e 2205
+00002f 1603
+000030 2b0b
+000031 1f0f                      table:  	.db		87,95,54,23,77,4,34,47,54,89,6,9,5,34,3,22,11,43,15,31
                                  	
 000032 940c 0032                 done:		jmp		done
 

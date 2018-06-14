@@ -49,7 +49,7 @@ switch:		st		-X,r17				; pre-decrements X to point to the address right before a
 			ld		r17,Z+				; loads into r17 the new value pointed to by the Z-register and post-increments Z by 1
 			jmp		compare				; loops back to compare:
 	
-table:  	.db		52,12,85,45,9,62,3,4,88,1,20,4,13,02,51,02,79,6,5,19
+table:  	.db		87,95,54,23,77,4,34,47,54,89,6,9,5,34,3,22,11,43,15,31
 	
 done:		jmp		done
 			.exit
