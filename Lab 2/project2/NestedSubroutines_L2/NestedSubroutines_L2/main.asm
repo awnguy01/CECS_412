@@ -27,7 +27,7 @@ int0v:		jmp		int0h			;External interrupt vector at address 0x2 in Flash memory (
 ;******************************    
 			.org	0x100			;originate MAIN at address 0x100 in FLASH memory (step through the code)  
 main:		call	init			;initialize variables subroutine, set break point here, check the STACK,SP,PC   
-endmain:	jmp		endmain
+wendmain:	jmp		endmain
 init:		lds		r0,count		;get initial count, set break point here and check the STACK,SP,PC   
 			sts		quotient,r0		;use the same r0 value to clear the quotient-   
 			sts		remainder,r0	;and the remainder storage locations
