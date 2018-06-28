@@ -41,6 +41,9 @@
 .global LADC				//global variable intended to hold the low byte of ADC
 .global ASCII				//global variable intended to hold a character byte
 .global DATA				//global variable intended to hold any data byte
+.global hAddress
+.global lAddress
+.global	content
 
 .set	temp,0				//student comment here
 
@@ -186,9 +189,9 @@ A2V1:	lds		r16,ADCSRA			//student comment here
 EEPROM_Write:      
 		sbic    EECR,EEPE
 		rjmp    EEPROM_Write		; Wait for completion of previous write
-		ldi		r18,0x00			; Set up address (r18:r17) in address register
-		ldi		r17,0x05 
-		ldi		r16,'F'				; Set up data in r16    
+		lds		r18,lAddress			; Set up address (r18:r17) in address register
+		lds		r17,hAddress 
+		lds		r16,content				; Set up data in r16    
 		out     EEARH, r18      
 		out     EEARL, r17			      
 		out     EEDR,r16			; Write data (r16) to Data Register  
@@ -200,9 +203,9 @@ EEPROM_Write:
 EEPROM_Read:					    
 		sbic    EECR,EEPE    
 		rjmp    EEPROM_Read		; Wait for completion of previous write
-		ldi		r18,0x00		; Set up address (r18:r17) in EEPROM address register
-		ldi		r17,0x05
-		ldi		r16,0x00   
+		lds		r18,lAddress		; Set up address (r18:r17) in EEPROM address register
+		lds		r17,hAddress
+		lds		r16,content
 		out     EEARH, r18   
 		out     EEARL, r17		   
 		sbi     EECR,EERE		; Start eeprom read by writing EERE

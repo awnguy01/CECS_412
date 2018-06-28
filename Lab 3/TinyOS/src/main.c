@@ -5,18 +5,21 @@
  // Author : Eugene Rockey
  // Copyright 2018, All Rights Reserved
 
+ #define F_CPU 16000000
+
  #include <math.h>
  #include <stdio.h>
  #include <stdlib.h>
+ #include <util/delay.h>
  
  const char MS1[] = "\r\nECE-412 ATMega328P Tiny OS";
  const char MS2[] = "\r\nby Eugene Rockey Copyright 2018, All Rights Reserved";
- const char MS3[] = "\r\nMenu: (L)CD, (A)CD, (E)EPROM, (U)SART\r\n";
+ const char MS3[] = "\r\nMenu: (L)CD, (A)DC, (E)EPROM, (U)SART\r\n";
  const char MS4[] = "\r\nReady: ";
  const char MS5[] = "\r\nInvalid Command Try Again...";
  const char MS6[] = "Volts\r";
  const char MS7[] = " F";
- const char teamName[] = "Four is Better Than Five";
+ const char teamName[] = "               Four is Better Than Five";
 
 void LCD_Init(void);			//external Assembly functions
 void UART_Init(void);
@@ -34,12 +37,15 @@ void EEPROM_Write(void);
 void BAUD_Set(void);
 void Data_Size_Set(void);
 void Parity_Set(void);
+void Stop_Set(void);
+void getEEPROMAddress(void);
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
 unsigned char hAddress;			//high byte of address used in EEPROM
 unsigned char lAddress;			//low byte of address used in EEPROM
 unsigned char content;			//content to write in EEPROM
+unsigned int count;				//counter variable
 
 char HADC;						//shared ADC variable with Assembly
 char LADC;						//shared ADC variable with Assembly
@@ -49,69 +55,89 @@ int Acc;						//Accumulator for ADC use
 double r, t;					// variables for temperature
 char temperature[4];
 
-void UART_Puts(const char *str)	//Display a string in the PC Terminal Program
+/**
+*UART_Puts
+*Display a string in the PC Terminal Program
+*/
+void UART_Puts(const char *str)
 {
 	while (*str)
 	{
 		ASCII = *str++;
 		UART_Put();
 	}
-}
+} // end UART_Puts
 
-void LCD_Puts(const char *str)	//Display a string on the LCD Module
+/**
+*LCD_Puts
+*Display a string on the LCD Module
+*/
+void LCD_Puts(const char *str)
 {
 	while (*str)
 	{
 		DATA = *str++;
 		LCD_Write_Data();
 	}
-}
+} // end LCD_Puts
 
-
-void Banner(void)				//Display Tiny OS Banner on Terminal
+/**
+*Banner
+*Display Tiny OS Banner on Terminal
+*/
+void Banner(void)
 {
 	UART_Puts(MS1);
 	UART_Puts(MS2);
 	UART_Puts(MS4);
-}
-
-void HELP(void)						//Display available Tiny OS Commands on Terminal
-{
-	UART_Puts(MS3);
-}
-
-void LCD(void)						//Lite LCD demo
-{
-	DATA = 0x34;					//Student Comment Here
-	LCD_Write_Command();
-	DATA = 0x08;					//Student Comment Here
-	LCD_Write_Command();
-	DATA = 0x02;					//Student Comment Here
-	LCD_Write_Command();
-	DATA = 0x06;					//Student Comment Here
-	LCD_Write_Command();
-	DATA = 0x0f;					//Student Comment Here
-	LCD_Write_Command();
-	LCD_Puts(teamName);
-	/*
-	Re-engineer this subroutine to have the LCD endlessly scroll a marquee sign of 
-	your Team's name either vertically or horizontally. Any key press should stop
-	the scrolling and return execution to the command line in Terminal. User must
-	always be able to return to command line.
-	*/
-}
+} // end Banner
 
 /**
-*LCDScroll
+*HELP
+*Display available Tiny OS Commands on Terminal
 */
-void LCDScroll(void)
+void HELP(void)
 {
-	DATA = 0x18;						                // command to scroll the text on LCD
-	LCD_Write_Command();				            // send the command to the LCD
-	UART_Puts("Team name is scrolling.");	  // place space into terminal
-	LCD_Write_Command();		                // send the command to the LCD
-	LCD_Write_Data();
-} // end LCDScroll
+	UART_Puts(MS3);
+} // end HELP
+
+/**
+*LCD
+*/
+void LCD(void)						//Lite LCD demo
+{
+	DATA = 0x34;					//Sets data bits in LCD
+	LCD_Write_Command();
+	DATA = 0x08;					//Clearing display without clearing DDRAM content
+	LCD_Write_Command();
+	DATA = 0x02;					//Set cursor position to 0
+	LCD_Write_Command();
+	DATA = 0x06;					//Entry Mode
+	LCD_Write_Command();
+	DATA = 0x0f;					//Display on cursor blinking
+	LCD_Write_Command();
+	LCD_Puts(teamName);
+	ASCII = '\0';
+	while (ASCII == '\0') {
+		for (count = 0; count < 40; count ++) {
+			DATA = 0x18;
+			LCD_Write_Command();
+			_delay_ms(200);
+			
+			asm("lds r16,0xC6"); // check what ASCII value is being stored
+			asm("sts ASCII,r16");
+
+			if (ASCII != '\0') {
+				DATA = 0x01;
+				LCD_Write_Command();
+				return;
+			}
+		}
+		DATA = 0x02;
+		LCD_Write_Command();
+	}
+	return;
+} // end LCD
 
 /**
 *Lite Demo of the Analog to Digital Converter
@@ -119,7 +145,7 @@ void LCDScroll(void)
 void ADC(void)
 {
 	ASCII = '\0';
-	while (ASCII != 'e' || ASCII != 'E') {
+	while (ASCII != 27) {
 		ADC_Get();
 
 		Acc = (((int)HADC) * 0x100 + (int)(LADC)); // get 10 bit number
@@ -135,16 +161,17 @@ void ADC(void)
 		UART_Puts("\r\n");
 		UART_Puts(temperature);
 		UART_Puts(MS7);
+
+		_delay_ms(100);
+		
 		UART_Puts("\033[2J");
 		UART_Puts("\033[0;0H");
 
 		asm("lds r16,0xC6"); // check what ASCII value is being stored
 		asm("sts ASCII,r16");
 
-		if (ASCII == 'e') {
-			return;
-		}
 	}
+	return;
 } // end ADC
 
 /**
@@ -153,10 +180,10 @@ void ADC(void)
 */
 void getEEPROMAddress()
 {
-	UART_Puts("\nEnter the high-bit of the EEPROM Address: ");
+	UART_Puts("\r\nEnter the high-bit of the EEPROM Address ");
 	UART_Get();
 	hAddress = ASCII; // set high bit of EEPROM address --- r18 --- see Assembler1.s
-	UART_Puts("Enter the low-bit of the EEPROM Address: ");
+	UART_Puts("\r\nEnter the low-bit of the EEPROM Address ");
 	UART_Get();
 	lAddress = ASCII; // set low bit EEPROM address --- r17 --- see Assembler1.s
 } // end getEEPROMAddress
@@ -168,26 +195,35 @@ void getEEPROMAddress()
 */
 void EEPROM(void)
 {
-	UART_Puts("Would you like to (R)ead, (W)rite, or (E)xit: ");
+	UART_Puts("\r\nWould you like to (R)ead, (W)rite, or (Esc) Menu\r\n");
 	UART_Get(); // get input from terminal
 	if (ASCII == 'r' || ASCII == 'R')
 	{
-		UART_Puts("You selected to read from EEPROM.\n");
+		UART_Puts("\r\nYou selected to read from EEPROM\r\n");
 		getEEPROMAddress();
+		UART_Puts("\r\n\r\nContent at ");
+		ASCII = hAddress;
+		UART_Put();
+		UART_Puts("x");
+		ASCII = lAddress;
+		UART_Put();
+		UART_Puts(": ");
 		EEPROM_Read(); // gets value stored in EEPROM
+		UART_Put();
+		UART_Puts("\r\n");
 	}
 	else if (ASCII == 'w' || ASCII == 'W')
 	{
-		UART_Puts("You selected to write to EEPROM.\n");
+		UART_Puts("\r\nYou selected to write to EEPROM\r\n");
 		getEEPROMAddress();
-		UART_Puts("Enter the content to be stored at the EEPROM Address provide: ");
+		UART_Puts("\r\nEnter the content to be stored at the EEPROM Address provide\r\n");
 		UART_Get(); // get input from terminal
 		content = ASCII; // set content to be stored in address
 		EEPROM_Write(); // write data to EEPROM
 	}
-	else if (ASCII == 'e' || ASCII == 'E')
+	else if (ASCII == 27)
 	{
-		UART_Puts("Thank you.");
+		UART_Puts("\r\nThank you.\r\n");
 		return;
 	}
 	else
@@ -196,12 +232,16 @@ void EEPROM(void)
 	}
 } // end EEPROM
 
+/**
+*USART
+*Prompts user to change the Baud rate, character size, parity, stop bits, or exit back to menu
+*/
 void USART(void) {
 	int dataBits = 0;
 	int parity = 0;
 	int stopBits = 0;
 	UART_Puts("\r\nSelect what you would like to change\r\n");
-	UART_Puts("\r\n(1)Baud Rate (2)# of Data bits (3)Parity (4)# of Stop bits (ESC) Menu\r\n");
+	UART_Puts("\r\n(1)Baud Rate (2)Character Size (3)Parity (4)Stop bits (ESC) Menu\r\n");
 	UART_Get();
 	switch(ASCII) {
 		case '1': BAUD_Set();
@@ -210,14 +250,20 @@ void USART(void) {
 			break;
 		case '3': Parity_Set();
 			break;
+		case '4': Stop_Set();
+			break;
 		case 27:
 			return;
 		default: UART_Puts("Invalid Option");
 			break;
 	}
 	return;
-}
+} // end USART
 
+/**
+*BAUD_Set
+*Changes the Baud rate to predefined values based on user choice
+*/
 void BAUD_Set(void) {
 	unsigned int done = 0;
 	while (!done) {
@@ -226,36 +272,42 @@ void BAUD_Set(void) {
 
 		switch (ASCII) {
 			case 'a':
+			case 'A':
 				UART_Puts("\r\nBaud rate selected: 9600\r\n");
 				asm("ldi r17, 0x00");
 				asm("ldi r16, 0x67");
 				done = 1;
 				break;
 			case 'b':
+			case 'B':
 				UART_Puts("\r\nBaud rate selected: 4800\r\n");
 				asm("ldi r17, 0x00");
 				asm("ldi r16, 0xCF");
 				done = 1;
 				break;
 			case 'c':
+			case 'C':
 				UART_Puts("\r\nBaud rate selected: 2400\r\n");
 				asm("ldi r17, 0x01");
 				asm("ldi r16, 0x9F");
 				done= 1;
 				break;
 			case 'd':
+			case 'D':
 				UART_Puts("\r\nBaud rate selected: 1200\r\n");
 				asm("ldi r17, 0x03");
 				asm("ldi r16, 0x3F");
 				done = 1;
 				break;
 			case 'e':
+			case 'E':
 				UART_Puts("\r\nBaud rate selected: 600\r\n");
 				asm("ldi 17, 0x06");
 				asm("ldi r16, 0x7F");
 				done = 1;
 				break;
 			case 'f':
+			case 'F':
 				UART_Puts("\r\nBaud rate selected: 300\r\n");
 				asm("ldi r17, 0x0C");
 				asm("ldi r16, 0xFF");
@@ -273,8 +325,12 @@ void BAUD_Set(void) {
 	asm("sts 0xC4,r16");
 	
 	return;
-}
+} // end BAUD_Set
 
+/**
+*Data_Size_Set
+*Sets the character size to predefined values based on user input
+*/
 void Data_Size_Set(void) {	
 	unsigned int *b_reg = (int *) 0xC1;
 	unsigned int *c_reg = (int *) 0xC2;
@@ -318,8 +374,12 @@ void Data_Size_Set(void) {
 				break;
 		}
 	}
-}
+} // end Data_Size_Set
 
+/*
+*Parity_Set
+*Changes the parity bit to predefined values based on user choice
+*/
 void Parity_Set(void) {
 	unsigned int *parity = (int *) 0xC2;
 	while (1) {
@@ -327,14 +387,17 @@ void Parity_Set(void) {
 		UART_Get();
 		switch(ASCII) {
 			case 'd':
+			case 'D':
 				*parity &=~(1<<5);
 				*parity &=~(1<<4);
 				return;
 			case 'e':
+			case 'E':
 				*parity |= (1<<5);
 				*parity &=~(1<<4);
 				return;
 			case 'o':
+			case 'O':
 				*parity |= (1<<5);
 				*parity |= (1<<4);
 				return;
@@ -345,8 +408,12 @@ void Parity_Set(void) {
 				break;
 		}
 	}
-}
+} // end Parity_Set
 
+/*
+*Stop_Set
+*Changes the stop bit to predefined values based on user choice
+*/
 void Stop_Set (void) {
 	unsigned int data = (int *) 0xC2;
 	while (1) {
@@ -366,8 +433,11 @@ void Stop_Set (void) {
 				break;
 		}
 	}
-}
+} // end Stop_Set
 
+/**
+* command interpreter
+*/
 void Command(void)					//command interpreter
 {
 	UART_Puts(MS3);
@@ -397,10 +467,13 @@ void Command(void)					//command interpreter
 		default:
 			UART_Puts(MS5);
 			HELP();
-		break;  			//Add a 'USART' command and subroutine to allow the user to reconfigure the 						//serial port parameters during runtime. Modify baud rate, # of data bits, parity, 							//# of stop bits.
+			break;  			//Add a 'USART' command and subroutine to allow the user to reconfigure the 						//serial port parameters during runtime. Modify baud rate, # of data bits, parity, 							//# of stop bits.
 	}
-}
+} // end Command
 
+/**
+* main
+*/
 int main(void)
 {
 	Mega328P_Init();
@@ -409,5 +482,5 @@ int main(void)
 	{
 		Command();				//infinite command loop
 	}
-}
+} // end Main
 
