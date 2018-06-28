@@ -5,6 +5,7 @@
  // Author : Eugene Rockey
  // Copyright 2018, All Rights Reserved
 
+ #include <math.h>
  #include <stdio.h>
  #include <stdlib.h>
  
@@ -14,8 +15,8 @@
  const char MS4[] = "\r\nReady: ";
  const char MS5[] = "\r\nInvalid Command Try Again...";
  const char MS6[] = "Volts\r";
- 
- 
+ const char MS7[] = " F";
+ const char teamName[] = "Four is Better Than Five";
 
 void LCD_Init(void);			//external Assembly functions
 void UART_Init(void);
@@ -36,11 +37,17 @@ void Parity_Set(void);
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
+unsigned char hAddress;			//high byte of address used in EEPROM
+unsigned char lAddress;			//low byte of address used in EEPROM
+unsigned char content;			//content to write in EEPROM
+
 char HADC;						//shared ADC variable with Assembly
 char LADC;						//shared ADC variable with Assembly
-
 char volts[5];					//string buffer for ADC output
 int Acc;						//Accumulator for ADC use
+
+double r, t;					// variables for temperature
+char temperature[4];
 
 void UART_Puts(const char *str)	//Display a string in the PC Terminal Program
 {
@@ -85,7 +92,7 @@ void LCD(void)						//Lite LCD demo
 	LCD_Write_Command();
 	DATA = 0x0f;					//Student Comment Here
 	LCD_Write_Command();
-	LCD_Puts("Hello ECE412!");
+	LCD_Puts(teamName);
 	/*
 	Re-engineer this subroutine to have the LCD endlessly scroll a marquee sign of 
 	your Team's name either vertically or horizontally. Any key press should stop
@@ -94,51 +101,100 @@ void LCD(void)						//Lite LCD demo
 	*/
 }
 
-void ADC(void)	//Lite Demo of the Analog to Digital Converter
+/**
+*LCDScroll
+*/
+void LCDScroll(void)
 {
-	volts[0x1]='.';
-	volts[0x3]=' ';
-	volts[0x4]= 0;
-	ADC_Get();
-	Acc = (((int)HADC) * 0x100 + (int)(LADC))*0xA;
-	volts[0x0] = 48 + (Acc / 0x7FE);
-	Acc = Acc % 0x7FE;
-	volts[0x2] = ((Acc *0xA) / 0x7FE) + 48;
-	Acc = (Acc * 0xA) % 0x7FE;
-	if (Acc >= 0x3FF) volts[0x2]++;
-	if (volts[0x2] == 58)
-	{
-		volts[0x2] = 48;
-		volts[0x0]++;
-	}
-	UART_Puts(volts);
-	UART_Puts(MS6);
-	/*
-		Re-engineer this subroutine to display temperature in degrees Fahrenheit on the Terminal.
-		The potentiometer simulates a thermistor, its varying resistance simulates the
-		varying resistance of a thermistor as it is heated and cooled. See the thermistor
-		equations in the lab 3 folder. User must always be able to return to command line.
-	*/
-	
-}
+	DATA = 0x18;						                // command to scroll the text on LCD
+	LCD_Write_Command();				            // send the command to the LCD
+	UART_Puts("Team name is scrolling.");	  // place space into terminal
+	LCD_Write_Command();		                // send the command to the LCD
+	LCD_Write_Data();
+} // end LCDScroll
 
+/**
+*Lite Demo of the Analog to Digital Converter
+*/
+void ADC(void)
+{
+	ASCII = '\0';
+	while (ASCII != 'e' || ASCII != 'E') {
+		ADC_Get();
+
+		Acc = (((int)HADC) * 0x100 + (int)(LADC)); // get 10 bit number
+
+		r = 10000.0 * Acc / (1024.0 - Acc); // adapt the thermistor to ADC
+
+		t = 3625 * 298.15 / (298.15*log(r / 10000) + 3950); // get temperature in Kelvin
+		t = t - 273.15; // convert to Celsius
+		t = t * 9.0 / 5.0 + 32.0; // convert to Fahrenheit
+
+		itoa((int)t, temperature, 10); // convert the temperature to a string for UART_Puts
+
+		UART_Puts("\r\n");
+		UART_Puts(temperature);
+		UART_Puts(MS7);
+		UART_Puts("\033[2J");
+		UART_Puts("\033[0;0H");
+
+		asm("lds r16,0xC6"); // check what ASCII value is being stored
+		asm("sts ASCII,r16");
+
+		if (ASCII == 'e') {
+			return;
+		}
+	}
+} // end ADC
+
+/**
+*getEEPROMAddress
+*gets high-bit and then low-bit from the user when prompted
+*/
+void getEEPROMAddress()
+{
+	UART_Puts("\nEnter the high-bit of the EEPROM Address: ");
+	UART_Get();
+	hAddress = ASCII; // set high bit of EEPROM address --- r18 --- see Assembler1.s
+	UART_Puts("Enter the low-bit of the EEPROM Address: ");
+	UART_Get();
+	lAddress = ASCII; // set low bit EEPROM address --- r17 --- see Assembler1.s
+} // end getEEPROMAddress
+
+
+/**
+*EEPROM
+*prompt user to read or write to EEPROM otherwise exit
+*/
 void EEPROM(void)
 {
-	UART_Puts("\r\nEEPROM Write and Read.");
-	/*
-	Re-engineer this subroutine so that a byte of data can be written to any address in EEPROM
-	during run-time via the command line and the same byte of data can be read back and verified after the power to
-	the Xplained Mini board has been cycled. Ask the user to enter a valid EEPROM address and an
-	8-bit data value. Utilize the following two given Assembly based drivers to communicate with the EEPROM. You
-	may modify the EEPROM drivers as needed. User must be able to always return to command line.
-	*/
-	UART_Puts("\r\n");
-	EEPROM_Write();
-	UART_Puts("\r\n");
-	EEPROM_Read();
-	UART_Put();
-	UART_Puts("\r\n");
-}
+	UART_Puts("Would you like to (R)ead, (W)rite, or (E)xit: ");
+	UART_Get(); // get input from terminal
+	if (ASCII == 'r' || ASCII == 'R')
+	{
+		UART_Puts("You selected to read from EEPROM.\n");
+		getEEPROMAddress();
+		EEPROM_Read(); // gets value stored in EEPROM
+	}
+	else if (ASCII == 'w' || ASCII == 'W')
+	{
+		UART_Puts("You selected to write to EEPROM.\n");
+		getEEPROMAddress();
+		UART_Puts("Enter the content to be stored at the EEPROM Address provide: ");
+		UART_Get(); // get input from terminal
+		content = ASCII; // set content to be stored in address
+		EEPROM_Write(); // write data to EEPROM
+	}
+	else if (ASCII == 'e' || ASCII == 'E')
+	{
+		UART_Puts("Thank you.");
+		return;
+	}
+	else
+	{
+		UART_Puts(MS5);
+	}
+} // end EEPROM
 
 void USART(void) {
 	int dataBits = 0;
@@ -323,7 +379,7 @@ void Command(void)					//command interpreter
 	switch (ASCII)
 	{
 		case 'l':
-		case: 'L': 
+		case 'L': 
 			LCD();
 			break;
 		case 'a':
@@ -335,7 +391,7 @@ void Command(void)					//command interpreter
 			EEPROM();
 			break;
 		case 'u': 
-		case: 'U':
+		case 'U':
 			USART();
 			break;
 		default:
