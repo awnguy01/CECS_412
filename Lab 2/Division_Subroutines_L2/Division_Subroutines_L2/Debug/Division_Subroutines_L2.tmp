@@ -1,0 +1,47 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.7</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\Debug\Division_Subroutines_L2.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>Division_Subroutines_L2.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>Division_Subroutines_L2.map</FILE>
+  <FILE>Division_Subroutines_L2.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <quotient><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>12</LINE></quotient>
+  <remainder><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>13</LINE></remainder>
+  <reset><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>23</LINE></reset>
+  <main><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>29</LINE></main>
+  <int0v><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>24</LINE></int0v>
+  <int0h><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>77</LINE></int0h>
+  <init><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>38</LINE></init>
+  <getnums><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>43</LINE></getnums>
+  <test><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>48</LINE></test>
+  <divide><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>68</LINE></divide>
+  <endmain><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>37</LINE></endmain>
+  <test2><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>51</LINE></test2>
+  <test1><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>50</LINE></test1>
+  <test4><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>57</LINE></test4>
+  <test3><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>56</LINE></test3>
+  <test6><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>62</LINE></test6>
+  <test5><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>61</LINE></test5>
+  <test8><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>67</LINE></test8>
+  <test7><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>66</LINE></test7>
+  <divide1><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>69</LINE></divide1>
+  <divide2><FILE>C:\Users\Andrew Nguyen Vo\Documents\CECS 412\Lab 2\Division_Subroutines_L2\Division_Subroutines_L2\main.asm</FILE><LINE>76</LINE></divide2>
+ </LABELS>
+</ASSEMBLER_INFO>
