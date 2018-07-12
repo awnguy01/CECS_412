@@ -53,16 +53,3 @@ table:  	.db		87,95,54,23,77,4,34,47,54,89,6,9,5,34,3,22,11,43,15,31
 	
 done:		jmp		done
 			.exit
-	/*
-			ldi		r16,celsius			;student comment goes here   
-			add		ZL,r16				;student comment goes here   
-			ldi		r16,0				;student comment goes here   
-			adc		ZH,r16				;student comment goes here   
-			lpm							;lpm = lpm r0,Z in reality, what does this mean?   
-			sts		output,r0			;store look-up result to SRAM   
-			ret							;consider MAIN as a subroutine to return from - but back to where??       
-										; Fahrenheit look-up table 
-			.equ	celsius = 5			;modify Celsius from 0 to 19 degrees for different results   
-			.exit
-
-			*/
