@@ -92,23 +92,25 @@ TIM2_OVF:
 TIM1_CAPT:
 		nop			;TC 1 capture event handler
 		reti
-TIM1_COMPA:			;TC 1 compare match A handler
-		sbrc	r19,0				;student comment here
-		rjmp	ONE					;student cmment here
-		ldi		r17,0xE8			;student comment here
-		ldi		r18,0x0B			;student comment here
-		ldi		r19,1				;student comment here
-		rjmp	BEGIN				;student comment here	
-ONE:	ldi		r17,0xE8			;student comment here
-		ldi		r18,0x0B			;student comment here
-		ldi		r19,0				;student comment here
-BEGIN:	lds		r16,OCR1AL			;student comment here
-		add		r17,r16				;student comment here
-		lds		r16,OCR1AH			;student comment here
-		adc		r18,r16				;student comment here
-		sts		OCR1AH,r18			;student comment here
-		sts		OCR1AL,r17			;student comment here
-		reti						;student comment here
+TIM1_COMPA:			      ;TC 1 compare match A handler
+		sbrc	r19,0				;if bit 0 in r19 is cleared then skip the following rjmp to ONE else jump to ONE
+		rjmp	ONE					;if bit 0 was not set in r19 then we need to set it so rel jump to ONE
+		ldi		r17,0xE8		;load 0xE8 to r17. 0xE8 = 232 = 11101000. this is the low bit of the output compare
+		ldi		r18,0x0B		;load 0x0B to r18. 0xEB = 235 = 11101011. this is the high bit of the output compare
+		ldi		r19,1				;load 1 to r19. this sets the bit to 1 
+		rjmp	BEGIN				;rel jump to BEGIN
+ONE:	
+    ldi		r17,0xE8	  ;load 0xE8 to r17
+		ldi		r18,0x0B		;load 0x0B to r18
+		ldi		r19,0				;load 0 to r19
+BEGIN:	
+    lds		r16,OCR1AL	;load OCR1AL bit to r16. OCR1AL is the output compare register 1A low bit
+		add		r17,r16			;add r16 to r17
+		lds		r16,OCR1AH	;load OCR1AH bit to r17. OCR1AH is the output compare register 1A high bit
+		adc		r18,r16			;add with carry r16 to r18
+		sts		OCR1AH,r18	;now store the value in r18 to OCR1AH
+		sts		OCR1AL,r17	;now store the value in r17 to OCR1AL
+		reti						  ;interrupt return
 TIM1_COMPB:
 		nop			;TC 1 compare match B handler
 		reti
