@@ -47,19 +47,19 @@ RESET:	;Initialize the ATMega328P chip for the THIS embedded application.
 		sts TCCR1C,r16			;force output compare set for channel A
 		ldi r16,0x40			;toggle OC1
 		sts TCCR1A,r16			;OC1B now set to compare/match
-		ldi	r18,0x0B			;11 loaded to r18
-		ldi r17,0xB8			;184 loaded to r17
+		ldi	r18,0x0B			;00001011 loaded to r18
+		ldi r17,0xB8			;10111000 loaded to r17
 		lds r16,TCNT1L			;timer counter low byte set to 01000000
-		add r17,r16				;248 value stored in r17
+		add r17,r16				;11111000 value stored in r17
 		lds r16,TCNT1H			;timer counter high byte also set to 01000000
-		adc r18,r16				;adds register r18 and r16 and sets carry bit
-		sts OCR1AH,r18			;student comment here
-		sts OCR1AL,r17			;student comment here
-		ldi r19,0				;student comment here
-		ldi r16,0x02			;student comment here
-		sts TIMSK1,r16			;student comment here
-		out TIFR1,r16			;student comment here
-		sei						;student comment here
+		adc r18,r16				;adds register r18 and r16 for 01001011
+		sts OCR1AH,r18			;stores high byte of register used to compare with counter
+		sts OCR1AL,r17			;stores low byte of register used to compare with counter
+		ldi r19,0				;clears r19
+		ldi r16,0x02			;stores 00000010 in r16
+		sts TIMSK1,r16			;enables the interrupt for output compare B
+		out TIFR1,r16			;clears the OCF1A flag
+		sei						;sets global interrupt flag
 here:	rjmp here
 		
 INT0_H:
