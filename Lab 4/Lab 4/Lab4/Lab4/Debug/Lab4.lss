@@ -1,8 +1,8 @@
 
-AVRASM ver. 2.2.6  c:\users\donkey\Documents\Atmel Studio\7.0\Lab4\Lab4\main.asm Sat Mar 24 07:58:42 2018
+AVRASM ver. 2.2.7  C:\Users\andre\Documents\A NGUYEN VO\UofL Summer 2018\CECS 412\Lab 4\Lab 4\Lab4\Lab4\main.asm Thu Jul 12 11:00:11 2018
 
-[builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\avrasm\inc\m328pdef.inc'
-[builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.132\avrasm\inc\m328pdef.inc'
+[builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc'
+[builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc'
                                  
                                   ; Lab4
                                  
@@ -1026,19 +1026,19 @@ AVRASM ver. 2.2.6  c:\users\donkey\Documents\Atmel Studio\7.0\Lab4\Lab4\main.asm
 000036 b904                      		out	DDRB,r16
                                  ;initialize and start Timer A, compare match, interrupt enabled
 000037 ec00                      		ldi	r16,0xC0			;set OC to compare match set output to high level
-000038 9300 0080                 		sts TCCR1A,r16			;student comment here
+000038 9300 0080                 		sts TCCR1A,r16			;COM1A bits set to high, OC1A set on compare/match
 00003a e004                      		ldi r16,0x04			;set clock prescaler
-00003b 9300 0081                 		sts TCCR1B,r16			;student comment here
+00003b 9300 0081                 		sts TCCR1B,r16			;clock divided by 256
 00003d e800                      		ldi r16,0x80			;force output compare, set PB1 high
-00003e 9300 0082                 		sts TCCR1C,r16			;student comment here
-000040 e400                      		ldi r16,0x40			;Student comment here
-000041 9300 0080                 		sts TCCR1A,r16			;student comment here
-000043 e02b                      		ldi	r18,0x0B			;student comment here
-000044 eb18                      		ldi r17,0xB8			;student comment here
-000045 9100 0084                 		lds r16,TCNT1L			;student comment here
-000047 0f10                      		add r17,r16				;student comment here
-000048 9100 0085                 		lds r16,TCNT1H			;student comment here
-00004a 1f20                      		adc r18,r16				;student comment here
+00003e 9300 0082                 		sts TCCR1C,r16			;force output compare set for channel A
+000040 e400                      		ldi r16,0x40			;toggle OC1
+000041 9300 0080                 		sts TCCR1A,r16			;OC1B now set to compare/match
+000043 e02b                      		ldi	r18,0x0B			;11 loaded to r18
+000044 eb18                      		ldi r17,0xB8			;184 loaded to r17
+000045 9100 0084                 		lds r16,TCNT1L			;timer counter low byte set to 01000000
+000047 0f10                      		add r17,r16				;248 value stored in r17
+000048 9100 0085                 		lds r16,TCNT1H			;timer counter high byte also set to 01000000
+00004a 1f20                      		adc r18,r16				;adds register r18 and r16 and sets carry bit
 00004b 9320 0089                 		sts OCR1AH,r18			;student comment here
 00004d 9310 0088                 		sts OCR1AL,r17			;student comment here
 00004f e030                      		ldi r19,0				;student comment here

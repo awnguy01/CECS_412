@@ -40,19 +40,19 @@ RESET:	;Initialize the ATMega328P chip for the THIS embedded application.
 		out	DDRB,r16
 ;initialize and start Timer A, compare match, interrupt enabled
 		ldi	r16,0xC0			;set OC to compare match set output to high level
-		sts TCCR1A,r16			;student comment here
+		sts TCCR1A,r16			;COM1A bits set to high, OC1A set on compare/match
 		ldi r16,0x04			;set clock prescaler
-		sts TCCR1B,r16			;student comment here
+		sts TCCR1B,r16			;clock divided by 256
 		ldi r16,0x80			;force output compare, set PB1 high
-		sts TCCR1C,r16			;student comment here
-		ldi r16,0x40			;Student comment here
-		sts TCCR1A,r16			;student comment here
-		ldi	r18,0x0B			;student comment here
-		ldi r17,0xB8			;student comment here
-		lds r16,TCNT1L			;student comment here
-		add r17,r16				;student comment here
-		lds r16,TCNT1H			;student comment here
-		adc r18,r16				;student comment here
+		sts TCCR1C,r16			;force output compare set for channel A
+		ldi r16,0x40			;toggle OC1
+		sts TCCR1A,r16			;OC1B now set to compare/match
+		ldi	r18,0x0B			;11 loaded to r18
+		ldi r17,0xB8			;184 loaded to r17
+		lds r16,TCNT1L			;timer counter low byte set to 01000000
+		add r17,r16				;248 value stored in r17
+		lds r16,TCNT1H			;timer counter high byte also set to 01000000
+		adc r18,r16				;adds register r18 and r16 and sets carry bit
 		sts OCR1AH,r18			;student comment here
 		sts OCR1AL,r17			;student comment here
 		ldi r19,0				;student comment here
