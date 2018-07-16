@@ -34,26 +34,28 @@
   <TIM2_OVF><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>102</LINE></TIM2_OVF>
   <TIM1_CAPT><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>106</LINE></TIM1_CAPT>
   <TIM1_COMPA><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>110</LINE></TIM1_COMPA>
-  <TIM1_COMPB><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>160</LINE></TIM1_COMPB>
-  <TIM1_OVF><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>164</LINE></TIM1_OVF>
-  <TIM0_COMPA><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>168</LINE></TIM0_COMPA>
-  <TIM0_COMPB><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>172</LINE></TIM0_COMPB>
-  <TIM0_OVF><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>176</LINE></TIM0_OVF>
-  <SPI_TC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>180</LINE></SPI_TC>
-  <USART_RXC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>184</LINE></USART_RXC>
-  <USART_UDRE><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>188</LINE></USART_UDRE>
-  <USART_TXC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>192</LINE></USART_TXC>
-  <ADCC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>196</LINE></ADCC>
-  <EE_READY><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>200</LINE></EE_READY>
-  <ANA_COMP><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>204</LINE></ANA_COMP>
-  <TWI><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>208</LINE></TWI>
-  <SPM_READY><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>212</LINE></SPM_READY>
+  <TIM1_COMPB><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>157</LINE></TIM1_COMPB>
+  <TIM1_OVF><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>161</LINE></TIM1_OVF>
+  <TIM0_COMPA><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>165</LINE></TIM0_COMPA>
+  <TIM0_COMPB><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>169</LINE></TIM0_COMPB>
+  <TIM0_OVF><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>173</LINE></TIM0_OVF>
+  <SPI_TC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>177</LINE></SPI_TC>
+  <USART_RXC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>181</LINE></USART_RXC>
+  <USART_UDRE><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>185</LINE></USART_UDRE>
+  <USART_TXC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>189</LINE></USART_TXC>
+  <ADCC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>193</LINE></ADCC>
+  <EE_READY><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>197</LINE></EE_READY>
+  <ANA_COMP><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>201</LINE></ANA_COMP>
+  <TWI><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>205</LINE></TWI>
+  <SPM_READY><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>209</LINE></SPM_READY>
   <here><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>67</LINE></here>
-  <ONE><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>131</LINE></ONE>
-  <BEGIN><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>118</LINE></BEGIN>
-  <INCREMENT><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>136</LINE></INCREMENT>
-  <DECREMENT><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>143</LINE></DECREMENT>
-  <CHECKIF_INC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>150</LINE></CHECKIF_INC>
-  <CHECKIF_DEC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>155</LINE></CHECKIF_DEC>
+  <BEGIN><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>113</LINE></BEGIN>
+  <INCREMENT><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>125</LINE></INCREMENT>
+  <DECREMENT><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>132</LINE></DECREMENT>
+  <ONE><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>122</LINE></ONE>
+  <CHECKIF_INC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>139</LINE></CHECKIF_INC>
+  <CHECKIF_DEC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>148</LINE></CHECKIF_DEC>
+  <SWAP_INC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>144</LINE></SWAP_INC>
+  <SWAP_DEC><FILE>C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm</FILE><LINE>153</LINE></SWAP_DEC>
  </LABELS>
 </ASSEMBLER_INFO>

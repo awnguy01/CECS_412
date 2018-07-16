@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm Mon Jul 16 16:24:33 2018
+AVRASM ver. 2.2.7  C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\main.asm Mon Jul 16 17:51:38 2018
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\avrasm\inc\m328pdef.inc'
@@ -1024,14 +1024,14 @@ AVRASM ver. 2.2.7  C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\ma
 000036 b904                          out   DDRB,r16     ;initialize and start Timer A, compare match, interrupt enabled
 000037 ec00                          ldi   r16,0xC0     ;set OC to compare match set output to high level
 000038 9300 0080                     sts   TCCR1A,r16   ;COM1A bits set to high, OC1A set on compare/match
-00003a e004                          ldi   r16,0x04     ;set clock prescaler --- change this. use 0x04?
+00003a e00b                          ldi   r16,0x0B     ;set clock prescaler
 00003b 9300 0081                     sts   TCCR1B,r16   ;clock divided by 256
 00003d e800                          ldi   r16,0x80     ;force output compare, set PB1 high
 00003e 9300 0082                     sts   TCCR1C,r16   ;force output compare set for channel A
-000040 e400                          ldi   r16,0x40     ;toggle OC1, select PWM mode --- change this. use 0x83? for fast mode?
+000040 e803                          ldi   r16,0x83     ;toggle OC1, select PWM mode --- change this. use 0x83? for fast mode?
 000041 9300 0080                     sts   TCCR1A,r16   ;OC1B now set to compare/match 
-000043 e02b                          ldi	  r18,0x0B     ;00001011 loaded to r18 --- change this. use 0x00?
-000044 eb18                          ldi   r17,0xB8     ;10111000 loaded to r17 --- change this. use 0x00?
+000043 e020                          ldi	  r18,0x00     ;00001011 loaded to r18
+000044 e010                          ldi   r17,0x00     ;10111000 loaded to r17
 000045 9100 0084                     lds   r16,TCNT1L   ;timer counter low byte set to 01000000
 000047 0f10                          add   r17,r16      ;11111000 value stored in r17
 000048 9100 0085                     lds   r16,TCNT1H   ;timer counter high byte also set to 01000000
@@ -1043,10 +1043,10 @@ AVRASM ver. 2.2.7  C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\ma
 000051 9300 006f                     sts   TIMSK1,r16   ;enables the interrupt for output compare A
 000053 bb06                          out   TIFR1,r16    ;clears the OCF1A flag
 000054 e001                          ldi   r16,0x01     ;sets amount to increment by
-000055 e030                          ldi   r19,0x00     ;clears r19 --- do we need this a second time?
+000055 e030                          ldi   r19,0x00     ;clears r19
 000056 e041                          ldi   r20,0x01     ;sets r20 to 1 so it can be compared with the increment flag, r22
 000057 ef5f                          ldi   r21,0xFF     ;sets r21 to 255 so it can be compared with the low bit, r17
-000058 e060                          ldi   r22,0x00     ;sets r22 to 0. this register will be used as a 'flag' that can be compared to determin increment or decrement
+000058 e060                          ldi   r22,0x00     ;sets r22 to 0. this register will be used as a 'flag' that can be compared to determine increment or decrement
 000059 e073                          ldi   r23,0x03     ;sets r23 to 3 to compare with the high bit
 00005a 9478                          sei                ;sets global interrupt flag
                                  
@@ -1094,52 +1094,49 @@ AVRASM ver. 2.2.7  C:\Users\Matthew Long\Documents\CECS_412\Lab 4\Lab 4\Lab 4\ma
 00006f 9518                          reti
                                  
                                  TIM1_COMPA:            ;TC 1 compare match A handler
-000070 fd30                          sbrc  r19,0        ;if bit 0 in r19 is cleared then skip the following rjmp to ONE else jump to ONE
-000071 c00a                          rjmp  ONE          ;if bit 0 was not set in r19 then we need to set it so rel jump to ONE
-                                     ;ldi   r17,0xE8     ;load 0xE8 to r17. 0xE8 = 232 = 11101000. this is the low bit of the output compare --- what is this?
-                                     ;ldi   r18,0x0B     ;load 0x0B to r18. 0xEB = 235 = 11101011. this is the high bit of the output compare --- what is this?
-                                     ;ldi   r19,1        ;load 1 to r19. this sets the bit to 1 --- what is this?
-000072 c000                          rjmp  BEGIN         ;rel jump to BEGIN
+000070 c000                          rjmp  BEGIN        ;rel jump to BEGIN
                                  
                                  BEGIN:
-                                     ;lds    r16,OCR1AL  ;load OCR1AL bit to r16. OCR1AL is the output compare register 1A low bit --- what is this?
-                                     ;add    r17,r16     ;add r16 to r17 --- what is this?
-                                     ;lds    r16,OCR1AH  ;load OCR1AH bit to r17. OCR1AH is the output compare register 1A high bit --- what is this?
-                                     ;adc    r18,r16     ;add with carry r16 to r18
-000073 9320 0089                     sts   OCR1AH,r18   ;now store the value in r18 to OCR1AH
-000075 9310 0088                     sts   OCR1AL,r17   ;now store the value in r17 to OCR1AL
-000077 1763                          cp    r22,r19      ;if increment flag, r22, is set to 1 and r19 is 1 then we need to increment
-000078 f031                          breq  INCREMENT    ;branch to increment if equal
-000079 1764                          cp    r22,r20      ;if increment flag, r22, is set to 0 and r20 is 0 then we need to decrement
-00007a f049                          breq  DECREMENT    ;branch to decrement if equal
-00007b 9518                          reti               ;interrupt return
+000071 9320 0089                     sts   OCR1AH,r18   ;now store the value in r18 to OCR1AH
+000073 9310 0088                     sts   OCR1AL,r17   ;now store the value in r17 to OCR1AL
+000075 1763                          cp    r22,r19      ;if increment flag, r22, is set to 1 and r19 is 1 then we need to increment
+000076 f021                          breq  INCREMENT    ;branch to increment if equal
+000077 1764                          cp    r22,r20      ;if increment flag, r22, is set to 0 and r20 is 0 then we need to decrement
+000078 f039                          breq  DECREMENT    ;branch to decrement if equal
+000079 9518                          reti               ;interrupt return
                                  
                                  ONE:
-00007c ee18                          ldi   r17,0xE8     ;load 0xE8 = 232 = 11101000 directly to r17 --- do we need this?
-00007d e02b                          ldi   r18,0x0B     ;load 0x0B = 235 = 11101011 directly to r18 --- do we need this?
-00007e e030                          ldi   r19,0x00     ;load 0 directly to r19
+00007a e030                          ldi   r19,0x00     ;load 0 directly to r19
                                  
                                  INCREMENT:
-00007f 0f10                          add   r17,r16      ;increment the low bit of compare register A, r17, by 1 
-000080 1f23                          adc   r18,r19      ;if there is a carry then add it to the high bit of compare register A, r18
-000081 1727                          cp    r18,r23      ;compare high bit with r23 which is 3
-000082 f031                          breq  CHECKIF_INC  ;if it is equal then branch to CHECKIF_INC
-000083 9518                          reti               ;return from interrupt
+00007b 0f10                          add   r17,r16      ;increment the low bit of compare register A, r17, by 1 
+00007c 1f23                          adc   r18,r19      ;if there is a carry then add it to the high bit of compare register A, r18
+00007d 1727                          cp    r18,r23      ;compare high bit with r23 which is 3
+00007e f031                          breq  CHECKIF_INC  ;if it is equal then branch to CHECKIF_INC
+00007f 9518                          reti               ;return from interrupt
                                      
                                  DECREMENT:
-000084 1b10                          sub   r17,r16      ;decrement the low bit of compare register A, r17, by 1
-000085 0b23                          sbc   r18,r19      ;if there is a carry then subtract it from the high bit of compare register A, r18
-000086 1723                          cp    r18,r19      ;compare the high bit with 0
-000087 f021                          breq  CHECKIF_DEC  ;if it is equal then branch to CHECKIF_DEC
-000088 9518                          reti               ;return from interrupt
+000080 1b10                          sub   r17,r16      ;decrement the low bit of compare register A, r17, by 1
+000081 0b23                          sbc   r18,r19      ;if there is a carry then subtract it from the high bit of compare register A, r18
+000082 1723                          cp    r18,r19      ;compare the high bit with 0
+000083 f031                          breq  CHECKIF_DEC  ;if it is equal then branch to CHECKIF_DEC
+000084 9518                          reti               ;return from interrupt
                                  
                                  CHECKIF_INC:
-000089 1315                          cpse  r17,r21      ;compare the low bit, r17, with r21, 255, skip if equal
-00008a e061                          ldi   r22,0x01     ;set the value of the increment flag to 1 indicating we need to decrement
-00008b 9518                          reti               ;return from interrupt
+000085 1715                          cp    r17,r21      ;compare the low bit, r17, with r21, 255, skip if equal
+000086 f009                          breq  SWAP_INC     ;if its equal then branch to SWAP_INC
+000087 9518                          reti               ;return from interrupt
+                                 
+                                 SWAP_INC:
+000088 e061                          ldi   r22,0x01     ;set the value of the increment flag to 1 indicating we need to decrement
+000089 9518                          reti               ;return from interrupt
                                  
                                  CHECKIF_DEC:
-00008c 1313                          cpse  r17,r19      ;compare the low bit, r17, with r19, 0, skip if equal
+00008a 1713                          cp    r17,r19      ;compare the low bit, r17, with r19, 0, skip if equal
+00008b f009                          breq  SWAP_DEC     ;if its equal then branch to SWAP_DEC
+00008c 9518                          reti               ;return from interrupt
+                                 
+                                 SWAP_DEC:
 00008d e060                          ldi   r22,0x00     ;set the value of the increment flag to 0 indicating we need to increment
 00008e 9518                          reti               ;return from interrupt
                                  
@@ -1216,7 +1213,7 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  20 r17:   9 r18:   9 r19:   9 r20:   2 
+r13:   0 r14:   0 r15:   0 r16:  20 r17:   8 r18:   8 r19:   8 r20:   2 
 r21:   2 r22:   5 r23:   2 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
 Registers used: 8 out of 35 (22.9%)
@@ -1224,24 +1221,24 @@ Registers used: 8 out of 35 (22.9%)
 "ATmega328P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   2 add   :   2 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :   4 brge  :   0 brhc  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   6 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
 brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   4 cpc   :   0 
-cpi   :   0 cpse  :   2 dec   :   0 eor   :   0 fmul  :   0 fmuls :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   6 cpc   :   0 
+cpi   :   0 cpse  :   0 dec   :   0 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :  26 
-ld    :   0 ldd   :   0 ldi   :  20 lds   :   2 lpm   :   0 lsl   :   0 
+ld    :   0 ldd   :   0 ldi   :  18 lds   :   2 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
 neg   :   0 nop   :  24 or    :   0 ori   :   0 out   :   2 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :  29 rjmp  :   3 rol   :   0 
+push  :   0 rcall :   0 ret   :   0 reti  :  31 rjmp  :   2 rol   :   0 
 ror   :   0 sbc   :   1 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
-sbiw  :   0 sbr   :   0 sbrc  :   1 sbrs  :   0 sec   :   0 seh   :   0 
+sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   9 
 sub   :   1 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 18 out of 113 (15.9%)
+Instructions used: 16 out of 113 (14.2%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%

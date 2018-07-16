@@ -38,14 +38,14 @@ RESET:	               ;Initialize the ATMega328P chip for the THIS embedded appl
     out   DDRB,r16     ;initialize and start Timer A, compare match, interrupt enabled
     ldi   r16,0xC0     ;set OC to compare match set output to high level
     sts   TCCR1A,r16   ;COM1A bits set to high, OC1A set on compare/match
-    ldi   r16,0x04     ;set clock prescaler --- change this. use 0x04?
+    ldi   r16,0x0B     ;set clock prescaler
     sts   TCCR1B,r16   ;clock divided by 256
     ldi   r16,0x80     ;force output compare, set PB1 high
     sts   TCCR1C,r16   ;force output compare set for channel A
-    ldi   r16,0x40     ;toggle OC1, select PWM mode --- change this. use 0x83? for fast mode?
+    ldi   r16,0x83     ;toggle OC1, select PWM mode --- change this. use 0x83? for fast mode?
     sts   TCCR1A,r16   ;OC1B now set to compare/match 
-    ldi	  r18,0x0B     ;00001011 loaded to r18 --- change this. use 0x00?
-    ldi   r17,0xB8     ;10111000 loaded to r17 --- change this. use 0x00?
+    ldi	  r18,0x00     ;00001011 loaded to r18
+    ldi   r17,0x00     ;10111000 loaded to r17
     lds   r16,TCNT1L   ;timer counter low byte set to 01000000
     add   r17,r16      ;11111000 value stored in r17
     lds   r16,TCNT1H   ;timer counter high byte also set to 01000000
@@ -57,10 +57,10 @@ RESET:	               ;Initialize the ATMega328P chip for the THIS embedded appl
     sts   TIMSK1,r16   ;enables the interrupt for output compare A
     out   TIFR1,r16    ;clears the OCF1A flag
     ldi   r16,0x01     ;sets amount to increment by
-    ldi   r19,0x00     ;clears r19 --- do we need this a second time?
+    ldi   r19,0x00     ;clears r19
     ldi   r20,0x01     ;sets r20 to 1 so it can be compared with the increment flag, r22
     ldi   r21,0xFF     ;sets r21 to 255 so it can be compared with the low bit, r17
-    ldi   r22,0x00     ;sets r22 to 0. this register will be used as a 'flag' that can be compared to determin increment or decrement
+    ldi   r22,0x00     ;sets r22 to 0. this register will be used as a 'flag' that can be compared to determine increment or decrement
     ldi   r23,0x03     ;sets r23 to 3 to compare with the high bit
     sei                ;sets global interrupt flag
 
@@ -108,18 +108,9 @@ TIM1_CAPT:
     reti
 
 TIM1_COMPA:            ;TC 1 compare match A handler
-    sbrc  r19,0        ;if bit 0 in r19 is cleared then skip the following rjmp to ONE else jump to ONE
-    rjmp  ONE          ;if bit 0 was not set in r19 then we need to set it so rel jump to ONE
-    ;ldi   r17,0xE8     ;load 0xE8 to r17. 0xE8 = 232 = 11101000. this is the low bit of the output compare --- what is this?
-    ;ldi   r18,0x0B     ;load 0x0B to r18. 0xEB = 235 = 11101011. this is the high bit of the output compare --- what is this?
-    ;ldi   r19,1        ;load 1 to r19. this sets the bit to 1 --- what is this?
-    rjmp  BEGIN         ;rel jump to BEGIN
+    rjmp  BEGIN        ;rel jump to BEGIN
 
 BEGIN:
-    ;lds    r16,OCR1AL  ;load OCR1AL bit to r16. OCR1AL is the output compare register 1A low bit --- what is this?
-    ;add    r17,r16     ;add r16 to r17 --- what is this?
-    ;lds    r16,OCR1AH  ;load OCR1AH bit to r17. OCR1AH is the output compare register 1A high bit --- what is this?
-    ;adc    r18,r16     ;add with carry r16 to r18
     sts   OCR1AH,r18   ;now store the value in r18 to OCR1AH
     sts   OCR1AL,r17   ;now store the value in r17 to OCR1AL
     cp    r22,r19      ;if increment flag, r22, is set to 1 and r19 is 1 then we need to increment
@@ -129,8 +120,6 @@ BEGIN:
     reti               ;interrupt return
 
 ONE:
-    ldi   r17,0xE8     ;load 0xE8 = 232 = 11101000 directly to r17 --- do we need this?
-    ldi   r18,0x0B     ;load 0x0B = 235 = 11101011 directly to r18 --- do we need this?
     ldi   r19,0x00     ;load 0 directly to r19
 
 INCREMENT:
@@ -148,12 +137,20 @@ DECREMENT:
     reti               ;return from interrupt
 
 CHECKIF_INC:
-    cpse  r17,r21      ;compare the low bit, r17, with r21, 255, skip if equal
+    cp    r17,r21      ;compare the low bit, r17, with r21, 255, skip if equal
+    breq  SWAP_INC     ;if its equal then branch to SWAP_INC
+    reti               ;return from interrupt
+
+SWAP_INC:
     ldi   r22,0x01     ;set the value of the increment flag to 1 indicating we need to decrement
     reti               ;return from interrupt
 
 CHECKIF_DEC:
-    cpse  r17,r19      ;compare the low bit, r17, with r19, 0, skip if equal
+    cp    r17,r19      ;compare the low bit, r17, with r19, 0, skip if equal
+    breq  SWAP_DEC     ;if its equal then branch to SWAP_DEC
+    reti               ;return from interrupt
+
+SWAP_DEC:
     ldi   r22,0x00     ;set the value of the increment flag to 0 indicating we need to increment
     reti               ;return from interrupt
 
