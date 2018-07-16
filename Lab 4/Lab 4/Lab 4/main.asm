@@ -32,8 +32,8 @@
     jmp   TWI          ;student discuss reset in report
     jmp   SPM_READY    ;student discuss reset in report
 
-RESET:	               ;Initialize the ATMega328P chip for the THIS embedded application initialize PORTB for Output
-    cli
+RESET:	               ;initialize the ATMega328P chip for the THIS embedded application initialize PORTB for Output
+    cli                ;clear interrupt flag
     ldi   r16,0xFF     ;PB1 or OC1A Output
     out   DDRB,r16     ;initialize and start Timer A, compare match, interrupt enabled
     ldi   r16,0xC0     ;set OC to compare match set output to high level
@@ -42,14 +42,14 @@ RESET:	               ;Initialize the ATMega328P chip for the THIS embedded appl
     sts   TCCR1B,r16   ;clock divided by 256
     ldi   r16,0x80     ;force output compare, set PB1 high
     sts   TCCR1C,r16   ;force output compare set for channel A
-    ldi   r16,0x83     ;toggle OC1, select PWM mode --- change this. use 0x83? for fast mode?
+    ldi   r16,0x83     ;toggle OC1, select PWM mode -- use 0x83 for fast mode
     sts   TCCR1A,r16   ;OC1B now set to compare/match 
-    ldi	  r18,0x00     ;00001011 loaded to r18
-    ldi   r17,0x00     ;10111000 loaded to r17
-    lds   r16,TCNT1L   ;timer counter low byte set to 01000000
-    add   r17,r16      ;11111000 value stored in r17
-    lds   r16,TCNT1H   ;timer counter high byte also set to 01000000
-    adc   r18,r16      ;adds register r18 and r16 for 01001011
+    ldi	  r18,0x00     ;0 loaded to r18
+    ldi   r17,0x00     ;0 loaded to r17
+    lds   r16,TCNT1L   ;timer counter low byte
+    add   r17,r16      ;r16 value stored in r17
+    lds   r16,TCNT1H   ;timer counter high byte
+    adc   r18,r16      ;adds register r18 and r16
     sts   OCR1AH,r18   ;stores high byte of register used to compare with counter
     sts   OCR1AL,r17   ;stores low byte of register used to compare with counter
     ldi   r19,0x00     ;clears r19
@@ -124,14 +124,14 @@ ONE:
 
 INCREMENT:
     add   r17,r16      ;increment the low bit of compare register A, r17, by 1 
-    adc   r18,r19      ;if there is a carry then add it to the high bit of compare register A, r18
+    adc   r18,r19      ;if there is a carry then add it to the high byte of compare register A, r18
     cp    r18,r23      ;compare high bit with r23 which is 3
     breq  CHECKIF_INC  ;if it is equal then branch to CHECKIF_INC
     reti               ;return from interrupt
     
 DECREMENT:
     sub   r17,r16      ;decrement the low bit of compare register A, r17, by 1
-    sbc   r18,r19      ;if there is a carry then subtract it from the high bit of compare register A, r18
+    sbc   r18,r19      ;if there is a carry then subtract it from the high byte of compare register A, r18
     cp    r18,r19      ;compare the high bit with 0
     breq  CHECKIF_DEC  ;if it is equal then branch to CHECKIF_DEC
     reti               ;return from interrupt
