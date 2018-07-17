@@ -12,6 +12,16 @@
 #include <stdlib.h>
 #include <util/delay.h>
 
+const char q1[] = "If there are 6 fish and 3 drown, how many fish are there?";
+const char a1 = '6';
+const char q2[] = "If there are 13 apples and you take 4, how many do you have?";
+const char a2 = '4';
+const char q3[] = "If two's company and three's a crowd, what is 4 and 5?";
+const char a3 = '9';
+const char q4[] = "A cat is given $6 and a spider $12, how much for you?";
+const char a4 = '3';
+
+
 const char MS1[] = "\r\nECE-412 ATMega328P Tiny OS";
 const char MS2[] = "\r\nby Eugene Rockey Copyright 2018, All Rights Reserved";
 const char MS3[] = "\r\nMenu: (L)CD, (A)DC, (E)EPROM, (U)SART\r\n";
