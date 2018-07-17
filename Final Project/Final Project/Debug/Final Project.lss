@@ -3,33 +3,33 @@ Final Project.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         000000ac  00800100  00000234  000002c8  2**0
+  0 .data         0000014c  00800100  000002c4  00000358  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000234  00000000  00000000  00000094  2**1
+  1 .text         000002c4  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          0000000b  008001ac  008001ac  00000374  2**0
+  2 .bss          00000007  0080024c  0080024c  000004a4  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000374  2**0
+  3 .comment      00000030  00000000  00000000  000004a4  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000003a4  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000004d4  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000068  00000000  00000000  000003e8  2**3
+  5 .debug_aranges 00000078  00000000  00000000  00000518  2**3
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000a58  00000000  00000000  00000450  2**0
+  6 .debug_info   00000c37  00000000  00000000  00000590  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000006e6  00000000  00000000  00000ea8  2**0
+  7 .debug_abbrev 0000076a  00000000  00000000  000011c7  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000004f3  00000000  00000000  0000158e  2**0
+  8 .debug_line   00000729  00000000  00000000  00001931  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000008c  00000000  00000000  00001a84  2**2
+  9 .debug_frame  000000b8  00000000  00000000  0000205c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00002dd5  00000000  00000000  00001b10  2**0
+ 10 .debug_str    00004740  00000000  00000000  00002114  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000000c8  00000000  00000000  000048e5  2**0
+ 11 .debug_loc    0000013f  00000000  00000000  00006854  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000038  00000000  00000000  000049ad  2**0
+ 12 .debug_ranges 00000048  00000000  00000000  00006993  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  00000011  00000000  00000000  000049e5  2**0
+ 13 .debug_macro  000004f0  00000000  00000000  000069db  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -97,461 +97,560 @@ Disassembly of section .text:
   72:	cd bf       	out	0x3d, r28	; 61
 
 00000074 <__do_copy_data>:
-  74:	11 e0       	ldi	r17, 0x01	; 1
+  74:	12 e0       	ldi	r17, 0x02	; 2
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	e4 e3       	ldi	r30, 0x34	; 52
+  7a:	e4 ec       	ldi	r30, 0xC4	; 196
   7c:	f2 e0       	ldi	r31, 0x02	; 2
   7e:	02 c0       	rjmp	.+4      	; 0x84 <DIDR1+0x5>
   80:	05 90       	lpm	r0, Z+
   82:	0d 92       	st	X+, r0
-  84:	ac 3a       	cpi	r26, 0xAC	; 172
+  84:	ac 34       	cpi	r26, 0x4C	; 76
   86:	b1 07       	cpc	r27, r17
   88:	d9 f7       	brne	.-10     	; 0x80 <DIDR1+0x1>
 
 0000008a <__do_clear_bss>:
-  8a:	21 e0       	ldi	r18, 0x01	; 1
-  8c:	ac ea       	ldi	r26, 0xAC	; 172
-  8e:	b1 e0       	ldi	r27, 0x01	; 1
+  8a:	22 e0       	ldi	r18, 0x02	; 2
+  8c:	ac e4       	ldi	r26, 0x4C	; 76
+  8e:	b2 e0       	ldi	r27, 0x02	; 2
   90:	01 c0       	rjmp	.+2      	; 0x94 <.do_clear_bss_start>
 
 00000092 <.do_clear_bss_loop>:
   92:	1d 92       	st	X+, r1
 
 00000094 <.do_clear_bss_start>:
-  94:	a7 3b       	cpi	r26, 0xB7	; 183
+  94:	a3 35       	cpi	r26, 0x53	; 83
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
-  9a:	c6 d0       	rcall	.+396    	; 0x228 <main>
-  9c:	c9 c0       	rjmp	.+402    	; 0x230 <_exit>
+  9a:	0e d1       	rcall	.+540    	; 0x2b8 <main>
+  9c:	11 c1       	rjmp	.+546    	; 0x2c0 <_exit>
 
 0000009e <__bad_interrupt>:
   9e:	b0 cf       	rjmp	.-160    	; 0x0 <__vectors>
 
 000000a0 <Mega328P_Init>:
-.set	temp,0				//student comment here
+.set	temp,0					;sets the temp assembly variable to 0
 
-.section ".text"			//student comment here
+.section ".text"				;start of the text section
 .global Mega328P_Init
 Mega328P_Init:
-		ldi	r16,0x07		;PB0(R*W),PB1(RS),PB2(E) as fixed outputs
+		ldi	r16,0x07			;PB0(R*W),PB1(RS),PB2(E) as fixed outputs
   a0:	07 e0       	ldi	r16, 0x07	; 7
-		out	DDRB,r16		//student comment here
+		out	DDRB,r16			;Sets Pins 0, 1, and 2 as outputs
   a2:	04 b9       	out	0x04, r16	; 4
-		ldi	r16,0			//student comment here
+		ldi	r16,0			    ;R16 cleared to put out to port B
   a4:	00 e0       	ldi	r16, 0x00	; 0
-		out	PORTB,r16		//student comment here
+		out	PORTB,r16			;Clears any data in I/O port B
   a6:	05 b9       	out	0x05, r16	; 5
-		out	U2X0,r16		;initialize UART, 8bits, no parity, 1 stop, 9600
+		out	U2X0,r16	   		;initialize UART, 8bits, no parity, 1 stop, 9600
   a8:	01 b9       	out	0x01, r16	; 1
-		ldi	r17,0x0			//student comment here
+		ldi	r17,0x0		  		;storing the value of the high byte for 9600 Baud rate
   aa:	10 e0       	ldi	r17, 0x00	; 0
-		ldi	r16,0x67		//student comment here
+		ldi	r16,0x67			;storing the value of the low byte for 9600 Baud rate
   ac:	07 e6       	ldi	r16, 0x67	; 103
-		sts	UBRR0H,r17		//student comment here
+		sts	UBRR0H,r17			;setting the high byte for Baud rate
   ae:	10 93 c5 00 	sts	0x00C5, r17	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7e00c5>
-		sts	UBRR0L,r16		//student comment here
+		sts	UBRR0L,r16			;setting the low byte for Baud rate
   b2:	00 93 c4 00 	sts	0x00C4, r16	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7e00c4>
-		ldi	r16,24			//student comment here
+		ldi	r16,24		  		;value to enable the receiver and transmitter
   b6:	08 e1       	ldi	r16, 0x18	; 24
-		sts	UCSR0B,r16		//student comment here
+		sts	UCSR0B,r16			;enabling the receiver and transmitter
   b8:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
-		ldi	r16,6			//student comment here
+		ldi	r16,6			    ;storing the value to set the character size to 8-bits
   bc:	06 e0       	ldi	r16, 0x06	; 6
-		sts	UCSR0C,r16		//student comment here
+		sts	UCSR0C,r16			;setting the character size to 8-bits
   be:	00 93 c2 00 	sts	0x00C2, r16	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7e00c2>
-		ldi r16,0x87		//initialize ADC
-  c2:	07 e8       	ldi	r16, 0x87	; 135
-		sts	ADCSRA,r16		//student comment here
-  c4:	00 93 7a 00 	sts	0x007A, r16	; 0x80007a <__TEXT_REGION_LENGTH__+0x7e007a>
-		ldi r16,0x40		//student comment here
-  c8:	00 e4       	ldi	r16, 0x40	; 64
-		sts ADMUX,r16		//student comment here
-  ca:	00 93 7c 00 	sts	0x007C, r16	; 0x80007c <__TEXT_REGION_LENGTH__+0x7e007c>
-		ldi r16,0			//student comment here
-  ce:	00 e0       	ldi	r16, 0x00	; 0
-		sts ADCSRB,r16		//student comment here
-  d0:	00 93 7b 00 	sts	0x007B, r16	; 0x80007b <__TEXT_REGION_LENGTH__+0x7e007b>
-		ldi r16,0xFE		//student comment here
-  d4:	0e ef       	ldi	r16, 0xFE	; 254
-		sts DIDR0,r16		//student comment here
-  d6:	00 93 7e 00 	sts	0x007E, r16	; 0x80007e <__TEXT_REGION_LENGTH__+0x7e007e>
-		ldi r16,0xFF		//student comment here
-  da:	0f ef       	ldi	r16, 0xFF	; 255
-		sts DIDR1,r16		//student comment here
-  dc:	00 93 7f 00 	sts	0x007F, r16	; 0x80007f <__TEXT_REGION_LENGTH__+0x7e007f>
-		ret					//student comment here
-  e0:	08 95       	ret
+		ldi r16,0xFE			;sets which ADC pins have their digital input buffer disabled
+  c2:	0e ef       	ldi	r16, 0xFE	; 254
+		sts DIDR0,r16	  		;disables all ADC pins except for ADC0D
+  c4:	00 93 7e 00 	sts	0x007E, r16	; 0x80007e <__TEXT_REGION_LENGTH__+0x7e007e>
+		ldi r16,0xFF	  		;determines which AINx pins to disable
+  c8:	0f ef       	ldi	r16, 0xFF	; 255
+		sts DIDR1,r16	  		;disables both AINx pins
+  ca:	00 93 7f 00 	sts	0x007F, r16	; 0x80007f <__TEXT_REGION_LENGTH__+0x7e007f>
+		ret				      	;return from subroutine
+  ce:	08 95       	ret
 
-000000e2 <LCD_Write_Command>:
+000000d0 <LCD_Write_Command>:
 	
+
 .global LCD_Write_Command
 LCD_Write_Command:
-	call	UART_Off		//student comment here
-  e2:	31 d0       	rcall	.+98     	; 0x146 <UART_Off>
-	ldi		r16,0xFF		;PD0 - PD7 as outputs
-  e4:	0f ef       	ldi	r16, 0xFF	; 255
-	out		DDRD,r16		//student comment here
-  e6:	0a b9       	out	0x0a, r16	; 10
-	lds		r16,DATA		//student comment here
-  e8:	00 91 ac 01 	lds	r16, 0x01AC	; 0x8001ac <__data_end>
-	out		PORTD,r16		//student comment here
-  ec:	0b b9       	out	0x0b, r16	; 11
-	ldi		r16,4			//student comment here
-  ee:	04 e0       	ldi	r16, 0x04	; 4
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
-  f0:	05 b9       	out	0x05, r16	; 5
-  f2:	04 d0       	rcall	.+8      	; 0xfc <LCD_Delay>
-	ldi		r16,0			//student comment here
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
-  f4:	00 e0       	ldi	r16, 0x00	; 0
-  f6:	05 b9       	out	0x05, r16	; 5
-	call	UART_On			//student comment here
-  f8:	01 d0       	rcall	.+2      	; 0xfc <LCD_Delay>
-  fa:	1f c0       	rjmp	.+62     	; 0x13a <UART_On>
+	call	UART_Off			;turns off UART
+  d0:	31 d0       	rcall	.+98     	; 0x134 <UART_Off>
+	ldi		r16,0xFF			;PD0 - PD7 as outputs
+  d2:	0f ef       	ldi	r16, 0xFF	; 255
+	out		DDRD,r16			;sets pins 0-7 as outputs
+  d4:	0a b9       	out	0x0a, r16	; 10
+	lds		r16,DATA			;loads the contents of the DATA variable that contain the LCD command
+  d6:	00 91 4d 02 	lds	r16, 0x024D	; 0x80024d <DATA>
+	out		PORTD,r16			;outputs the contents of the DATA variable to port D
+  da:	0b b9       	out	0x0b, r16	; 11
+	ldi		r16,4			    ;sets the output to not display on the LCD
+  dc:	04 e0       	ldi	r16, 0x04	; 4
+	out		PORTB,r16			;output does not display on the LCD
+	call	LCD_Delay			;delays the program
+  de:	05 b9       	out	0x05, r16	; 5
+  e0:	04 d0       	rcall	.+8      	; 0xea <LCD_Delay>
+	ldi		r16,0			    ;clears the data in port B
+	out		PORTB,r16			;port B cleared
+	call	LCD_Delay			;delays the program
+  e2:	00 e0       	ldi	r16, 0x00	; 0
+  e4:	05 b9       	out	0x05, r16	; 5
+	call	UART_On				;re-enables UART
+  e6:	01 d0       	rcall	.+2      	; 0xea <LCD_Delay>
+  e8:	1f c0       	rjmp	.+62     	; 0x128 <UART_On>
 
-000000fc <LCD_Delay>:
-	ret						//student comment here
-  fc:	0a ef       	ldi	r16, 0xFA	; 250
+000000ea <LCD_Delay>:
+	ret						    ;return from subroutine
+  ea:	0a ef       	ldi	r16, 0xFA	; 250
 
-000000fe <D0>:
+000000ec <D0>:
 
 LCD_Delay:
-	ldi		r16,0xFA		//student comment here
-  fe:	1f ef       	ldi	r17, 0xFF	; 255
+	ldi		r16,0xFA			;sets a high value for the delay
+  ec:	1f ef       	ldi	r17, 0xFF	; 255
 
-00000100 <D1>:
-D0:	ldi		r17,0xFF		//student comment here
- 100:	1a 95       	dec	r17
-D1:	dec		r17				//student comment here
- 102:	f1 f7       	brne	.-4      	; 0x100 <D1>
-	brne	D1				//student comment here
-	dec		r16				//student comment here
- 104:	0a 95       	dec	r16
-	brne	D0				//student comment here
- 106:	d9 f7       	brne	.-10     	; 0xfe <D0>
-	ret						//student comment here
- 108:	08 95       	ret
+000000ee <D1>:
+D0:	ldi		r17,0xFF			;sets a high value for the delay
+  ee:	1a 95       	dec	r17
+D1:	dec		r17					;decrements r17 continuously until 0 to create delay
+  f0:	f1 f7       	brne	.-4      	; 0xee <D1>
+	brne	D1				    ;loops back to decrement r17 until 0
+	dec		r16			  		;decrements r16 continuously until 0 to create delay
+  f2:	0a 95       	dec	r16
+	brne	D0			  		;loops back to decrement r16 until 0
+  f4:	d9 f7       	brne	.-10     	; 0xec <D0>
+	ret						    ;return from subroutine
+  f6:	08 95       	ret
 
-0000010a <LCD_Write_Data>:
+000000f8 <LCD_Write_Data>:
 
 .global LCD_Write_Data
 LCD_Write_Data:
-	call	UART_Off		//student comment here
- 10a:	1d d0       	rcall	.+58     	; 0x146 <UART_Off>
- 10c:	0f ef       	ldi	r16, 0xFF	; 255
-	ldi		r16,0xFF		//student comment here
- 10e:	0a b9       	out	0x0a, r16	; 10
-	out		DDRD,r16		//student comment here
- 110:	00 91 ac 01 	lds	r16, 0x01AC	; 0x8001ac <__data_end>
-	lds		r16,DATA		//student comment here
-	out		PORTD,r16		//student comment here
- 114:	0b b9       	out	0x0b, r16	; 11
-	ldi		r16,6			//student comment here
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
- 116:	06 e0       	ldi	r16, 0x06	; 6
-	ldi		r16,0			//student comment here
- 118:	05 b9       	out	0x05, r16	; 5
-	out		PORTB,r16		//student comment here
- 11a:	f0 df       	rcall	.-32     	; 0xfc <LCD_Delay>
-	call	LCD_Delay		//student comment here
- 11c:	00 e0       	ldi	r16, 0x00	; 0
- 11e:	05 b9       	out	0x05, r16	; 5
-	call	UART_On			//student comment here
- 120:	ed df       	rcall	.-38     	; 0xfc <LCD_Delay>
- 122:	0b c0       	rjmp	.+22     	; 0x13a <UART_On>
-	ret						//student comment here
- 124:	08 95       	ret
+	call	UART_Off			;turns off UART
+  f8:	1d d0       	rcall	.+58     	; 0x134 <UART_Off>
+  fa:	0f ef       	ldi	r16, 0xFF	; 255
+	ldi		r16,0xFF			;PD0 - PD7 as outputs
+  fc:	0a b9       	out	0x0a, r16	; 10
+	out		DDRD,r16			;sets pins 0-7 as outputs
+  fe:	00 91 4d 02 	lds	r16, 0x024D	; 0x80024d <DATA>
+	lds		r16,DATA			;loads the contents of the DATA variable that contain the output
+	out		PORTD,r16			;outputs the contents of the DATA variable to port D
+ 102:	0b b9       	out	0x0b, r16	; 11
+	ldi		r16,6			    ;sets the output needed for the LCD to output to the screen
+	out		PORTB,r16			;registers that the data from port D is to be outputted to the screen
+	call	LCD_Delay			;delays the program
+ 104:	06 e0       	ldi	r16, 0x06	; 6
+	ldi		r16,0			    ;clears the data in port B
+ 106:	05 b9       	out	0x05, r16	; 5
+	out		PORTB,r16			;port B cleared
+ 108:	f0 df       	rcall	.-32     	; 0xea <LCD_Delay>
+	call	LCD_Delay			;delays the program
+ 10a:	00 e0       	ldi	r16, 0x00	; 0
+ 10c:	05 b9       	out	0x05, r16	; 5
+	call	UART_On				;re-enables UART
+ 10e:	ed df       	rcall	.-38     	; 0xea <LCD_Delay>
+ 110:	0b c0       	rjmp	.+22     	; 0x128 <UART_On>
+	ret						    ;return from subroutine
+ 112:	08 95       	ret
 
-00000126 <LCD_Read_Data>:
+00000114 <LCD_Read_Data>:
 
 .global LCD_Read_Data
 LCD_Read_Data:
-	call	UART_Off		//student comment here
- 126:	0f d0       	rcall	.+30     	; 0x146 <UART_Off>
-	ldi		r16,0x00		//student comment here
- 128:	00 e0       	ldi	r16, 0x00	; 0
-	out		DDRD,r16		//student comment here
- 12a:	0a b9       	out	0x0a, r16	; 10
-	out		PORTB,4			//student comment here
- 12c:	45 b8       	out	0x05, r4	; 5
-	in		r16,PORTD		//student comment here
- 12e:	0b b1       	in	r16, 0x0b	; 11
-	sts		DATA,r16		//student comment here
- 130:	00 93 ac 01 	sts	0x01AC, r16	; 0x8001ac <__data_end>
-	out		PORTB,0			//student comment here
- 134:	05 b8       	out	0x05, r0	; 5
-	call	UART_On			//student comment here
- 136:	01 c0       	rjmp	.+2      	; 0x13a <UART_On>
- 138:	08 95       	ret
+	call	UART_Off			;turns off UART
+ 114:	0f d0       	rcall	.+30     	; 0x134 <UART_Off>
+	ldi		r16,0x00			;PD0 - PD7 as inputs
+ 116:	00 e0       	ldi	r16, 0x00	; 0
+	out		DDRD,r16			;sets pins 0-7 as inputs
+ 118:	0a b9       	out	0x0a, r16	; 10
+	out		PORTB,4				;LCD does not display anything onto the screen
+ 11a:	45 b8       	out	0x05, r4	; 5
+	in		r16,PORTD			;stores the data in port D to r16
+ 11c:	0b b1       	in	r16, 0x0b	; 11
+	sts		DATA,r16			;stores that data in the DATA variable
+ 11e:	00 93 4d 02 	sts	0x024D, r16	; 0x80024d <DATA>
+	out		PORTB,0				;clears port B
+ 122:	05 b8       	out	0x05, r0	; 5
+	call	UART_On				;re-enables UART
+ 124:	01 c0       	rjmp	.+2      	; 0x128 <UART_On>
+ 126:	08 95       	ret
 
-0000013a <UART_On>:
-	ret						//student comment here
- 13a:	02 e0       	ldi	r16, 0x02	; 2
+00000128 <UART_On>:
+	ret						    ;return from subroutine
+ 128:	02 e0       	ldi	r16, 0x02	; 2
 
 .global UART_On
 UART_On:
-	ldi		r16,2				//student comment here
- 13c:	0a b9       	out	0x0a, r16	; 10
-	out		DDRD,r16			//student comment here
- 13e:	08 e1       	ldi	r16, 0x18	; 24
-	ldi		r16,24				//student comment here
- 140:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
-	sts		UCSR0B,r16			//student comment here
- 144:	08 95       	ret
+	ldi		r16,2				;load 2 into r16
+ 12a:	0a b9       	out	0x0a, r16	; 10
+	out		DDRD,r16			;sets direction of port d to 2
+ 12c:	08 e1       	ldi	r16, 0x18	; 24
+	ldi		r16,24				;loads 24 into r16
+ 12e:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
+	sts		UCSR0B,r16			;store r16 content into USCR0B
+ 132:	08 95       	ret
 
-00000146 <UART_Off>:
-	ret							//student comment here
- 146:	00 e0       	ldi	r16, 0x00	; 0
+00000134 <UART_Off>:
+	ret							;return from subroutine
+ 134:	00 e0       	ldi	r16, 0x00	; 0
 
 .global UART_Off
 UART_Off:
-	ldi	r16,0					//student comment here
- 148:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
-	sts UCSR0B,r16				//student comment here
- 14c:	08 95       	ret
+	ldi	r16,0					;loads 0 (or low) into r16
+ 136:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
+	sts UCSR0B,r16				;loads contents of r16 into UCSR0B in other words sets 
+ 13a:	08 95       	ret
 
-0000014e <UART_Clear>:
-	ret							//student comment here
- 14e:	00 91 c0 00 	lds	r16, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
+0000013c <UART_Clear>:
+									;UCSR0B to low which turns off UART
+	ret							;return from subroutine
+ 13c:	00 91 c0 00 	lds	r16, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
 
 .global UART_Clear
 UART_Clear:
-	lds		r16,UCSR0A			//student comment here
- 152:	07 ff       	sbrs	r16, 7
-	sbrs	r16,RXC0			//student comment here
- 154:	08 95       	ret
-	ret							//student comment here
- 156:	00 91 c6 00 	lds	r16, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
-	lds		r16,UDR0			//student comment here
- 15a:	f9 cf       	rjmp	.-14     	; 0x14e <UART_Clear>
+	lds		r16,UCSR0A			;load UCSR0A into r16
+ 140:	07 ff       	sbrs	r16, 7
+	sbrs	r16,RXC0			;skip the following return instruction if RXC0 bit is set in r16
+ 142:	08 95       	ret
+	ret							;return from subroutine when RXC0 is not set
+ 144:	00 91 c6 00 	lds	r16, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
+	lds		r16,UDR0			;if previous return did not occur load UDR0 into r16 and try again
+ 148:	f9 cf       	rjmp	.-14     	; 0x13c <UART_Clear>
 
-0000015c <UART_Get>:
-	rjmp	UART_Clear			//student comment here
- 15c:	00 91 c0 00 	lds	r16, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
+0000014a <UART_Get>:
+	rjmp	UART_Clear			;loop over UART_Clear
+ 14a:	00 91 c0 00 	lds	r16, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
 
 .global UART_Get
 UART_Get:
-	lds		r16,UCSR0A			//student comment here
- 160:	07 ff       	sbrs	r16, 7
-	sbrs	r16,RXC0			//student comment here
- 162:	fc cf       	rjmp	.-8      	; 0x15c <UART_Get>
-	rjmp	UART_Get			//student comment here
- 164:	00 91 c6 00 	lds	r16, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
-	lds		r16,UDR0			//student comment here
- 168:	00 93 ae 01 	sts	0x01AE, r16	; 0x8001ae <ASCII>
-	sts		ASCII,r16			//student comment here
- 16c:	08 95       	ret
+	lds		r16,UCSR0A			;retrieves the status register that checks if there is data in the buffer
+ 14e:	07 ff       	sbrs	r16, 7
+	sbrs	r16,RXC0			;skips the next instruction if there is data in the buffer
+ 150:	fc cf       	rjmp	.-8      	; 0x14a <UART_Get>
+	rjmp	UART_Get			;loops the data retrieval function until there is data in the buffer
+ 152:	00 91 c6 00 	lds	r16, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
+	lds		r16,UDR0			;stores the data in the buffer in r16
+ 156:	00 93 50 02 	sts	0x0250, r16	; 0x800250 <ASCII>
+	sts		ASCII,r16			;stores the register data into the address pointed to by ASCII
+ 15a:	08 95       	ret
 
-0000016e <UART_Put>:
-	ret							//student comment here
- 16e:	10 91 c0 00 	lds	r17, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
+0000015c <UART_Put>:
+	ret							;return from subroutine
+ 15c:	10 91 c0 00 	lds	r17, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
 
 .global UART_Put
 UART_Put:
-	lds		r17,UCSR0A			//student comment here
- 172:	15 ff       	sbrs	r17, 5
-	sbrs	r17,UDRE0			//student comment here
- 174:	fc cf       	rjmp	.-8      	; 0x16e <UART_Put>
-	rjmp	UART_Put			//student comment here
- 176:	00 91 ae 01 	lds	r16, 0x01AE	; 0x8001ae <ASCII>
-	lds		r16,ASCII			//student comment here
- 17a:	00 93 c6 00 	sts	0x00C6, r16	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
-	sts		UDR0,r16			//student comment here
- 17e:	08 95       	ret
+	lds		r17,UCSR0A			;store USCR0A (control status register A) into r17
+ 160:	15 ff       	sbrs	r17, 5
+	sbrs	r17,UDRE0			;if the UART data register empty bit is set then skip the following
+ 162:	fc cf       	rjmp	.-8      	; 0x15c <UART_Put>
+									;relative jump instruction
+	rjmp	UART_Put			;if the UART data register empty bit is not set loop back
+ 164:	00 91 50 02 	lds	r16, 0x0250	; 0x800250 <ASCII>
+									;through UART_Put 
+	lds		r16,ASCII			;load what is stored in ASCII to r16
+ 168:	00 93 c6 00 	sts	0x00C6, r16	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
+	sts		UDR0,r16			;store value in r16 to UDR0
+ 16c:	08 95       	ret
 
-00000180 <UART_Puts>:
-
-char volts[5];					//string buffer for ADC output
-int Acc;						//Accumulator for ADC use
-
-void UART_Puts(const char *str)	//Display a string in the PC Terminal Program
-{
- 180:	cf 93       	push	r28
- 182:	df 93       	push	r29
- 184:	ec 01       	movw	r28, r24
-	while (*str)
- 186:	98 81       	ld	r25, Y
- 188:	99 23       	and	r25, r25
- 18a:	39 f0       	breq	.+14     	; 0x19a <UART_Puts+0x1a>
- 18c:	21 96       	adiw	r28, 0x01	; 1
-	{
-		ASCII = *str++;
- 18e:	90 93 ae 01 	sts	0x01AE, r25	; 0x8001ae <ASCII>
-		UART_Put();
- 192:	ed df       	rcall	.-38     	; 0x16e <UART_Put>
-char volts[5];					//string buffer for ADC output
-int Acc;						//Accumulator for ADC use
-
-void UART_Puts(const char *str)	//Display a string in the PC Terminal Program
-{
-	while (*str)
- 194:	99 91       	ld	r25, Y+
- 196:	91 11       	cpse	r25, r1
- 198:	fa cf       	rjmp	.-12     	; 0x18e <UART_Puts+0xe>
-	{
-		ASCII = *str++;
-		UART_Put();
-	}
-}
- 19a:	df 91       	pop	r29
- 19c:	cf 91       	pop	r28
- 19e:	08 95       	ret
-
-000001a0 <LCD_Puts>:
-
-void LCD_Puts(const char *str)	//Display a string on the LCD Module
-{
- 1a0:	cf 93       	push	r28
- 1a2:	df 93       	push	r29
- 1a4:	ec 01       	movw	r28, r24
-	while (*str)
- 1a6:	98 81       	ld	r25, Y
- 1a8:	99 23       	and	r25, r25
- 1aa:	39 f0       	breq	.+14     	; 0x1ba <LCD_Puts+0x1a>
- 1ac:	21 96       	adiw	r28, 0x01	; 1
-	{
-		DATA = *str++;
- 1ae:	90 93 ac 01 	sts	0x01AC, r25	; 0x8001ac <__data_end>
-		LCD_Write_Data();
- 1b2:	ab df       	rcall	.-170    	; 0x10a <LCD_Write_Data>
-	}
-}
-
-void LCD_Puts(const char *str)	//Display a string on the LCD Module
-{
-	while (*str)
- 1b4:	99 91       	ld	r25, Y+
- 1b6:	91 11       	cpse	r25, r1
- 1b8:	fa cf       	rjmp	.-12     	; 0x1ae <LCD_Puts+0xe>
-	{
-		DATA = *str++;
-		LCD_Write_Data();
-	}
-}
- 1ba:	df 91       	pop	r29
- 1bc:	cf 91       	pop	r28
- 1be:	08 95       	ret
-
-000001c0 <Banner>:
-
-
-void Banner(void)				//Display Tiny OS Banner on Terminal
-{
-	UART_Puts(MS1);
- 1c0:	8f e8       	ldi	r24, 0x8F	; 143
- 1c2:	91 e0       	ldi	r25, 0x01	; 1
- 1c4:	dd df       	rcall	.-70     	; 0x180 <UART_Puts>
-	UART_Puts(MS2);
- 1c6:	88 e5       	ldi	r24, 0x58	; 88
- 1c8:	91 e0       	ldi	r25, 0x01	; 1
- 1ca:	da df       	rcall	.-76     	; 0x180 <UART_Puts>
-	UART_Puts(MS4);
- 1cc:	8d e2       	ldi	r24, 0x2D	; 45
- 1ce:	91 e0       	ldi	r25, 0x01	; 1
- 1d0:	d7 cf       	rjmp	.-82     	; 0x180 <UART_Puts>
- 1d2:	08 95       	ret
-
-000001d4 <LCD>:
-}
-
-void LCD(void)						//Lite LCD demo
-{
-	DATA = 0x34;					//Student Comment Here
- 1d4:	84 e3       	ldi	r24, 0x34	; 52
- 1d6:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
-	LCD_Write_Command();
- 1da:	83 df       	rcall	.-250    	; 0xe2 <LCD_Write_Command>
-	DATA = 0x08;					//Student Comment Here
- 1dc:	88 e0       	ldi	r24, 0x08	; 8
- 1de:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
-	LCD_Write_Command();
- 1e2:	7f df       	rcall	.-258    	; 0xe2 <LCD_Write_Command>
-	DATA = 0x02;					//Student Comment Here
- 1e4:	82 e0       	ldi	r24, 0x02	; 2
- 1e6:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
-	LCD_Write_Command();
- 1ea:	7b df       	rcall	.-266    	; 0xe2 <LCD_Write_Command>
-	DATA = 0x06;					//Student Comment Here
- 1ec:	86 e0       	ldi	r24, 0x06	; 6
- 1ee:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
-	LCD_Write_Command();
-	DATA = 0x0f;					//Student Comment Here
- 1f2:	77 df       	rcall	.-274    	; 0xe2 <LCD_Write_Command>
- 1f4:	8f e0       	ldi	r24, 0x0F	; 15
-	LCD_Write_Command();
- 1f6:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
-	LCD_Puts("Hello ECE412!");
- 1fa:	73 df       	rcall	.-282    	; 0xe2 <LCD_Write_Command>
- 1fc:	80 e0       	ldi	r24, 0x00	; 0
- 1fe:	91 e0       	ldi	r25, 0x01	; 1
- 200:	cf cf       	rjmp	.-98     	; 0x1a0 <LCD_Puts>
- 202:	08 95       	ret
-
-00000204 <Command>:
-	*/
-}
-
-void Command(void)					//command interpreter
+0000016e <UART_Puts>:
+	ret							;return from subroutine
+ 16e:	cf 93       	push	r28
+*HELP
+*Display available Tiny OS Commands on Terminal
+*/
+void HELP(void)
 {
 	UART_Puts(MS3);
- 204:	87 e3       	ldi	r24, 0x37	; 55
- 206:	91 e0       	ldi	r25, 0x01	; 1
- 208:	bb df       	rcall	.-138    	; 0x180 <UART_Puts>
-	ASCII = '\0';						
- 20a:	10 92 ae 01 	sts	0x01AE, r1	; 0x8001ae <ASCII>
+ 170:	df 93       	push	r29
+ 172:	ec 01       	movw	r28, r24
+ 174:	98 81       	ld	r25, Y
+ 176:	99 23       	and	r25, r25
+ 178:	39 f0       	breq	.+14     	; 0x188 <UART_Puts+0x1a>
+ 17a:	21 96       	adiw	r28, 0x01	; 1
+ 17c:	90 93 50 02 	sts	0x0250, r25	; 0x800250 <ASCII>
+ 180:	ed df       	rcall	.-38     	; 0x15c <UART_Put>
+ 182:	99 91       	ld	r25, Y+
+ 184:	91 11       	cpse	r25, r1
+ 186:	fa cf       	rjmp	.-12     	; 0x17c <UART_Puts+0xe>
+ 188:	df 91       	pop	r29
+ 18a:	cf 91       	pop	r28
+ 18c:	08 95       	ret
+
+0000018e <LCD_Puts>:
+ 18e:	cf 93       	push	r28
+ 190:	df 93       	push	r29
+ 192:	ec 01       	movw	r28, r24
+ 194:	98 81       	ld	r25, Y
+ 196:	99 23       	and	r25, r25
+ 198:	39 f0       	breq	.+14     	; 0x1a8 <LCD_Puts+0x1a>
+ 19a:	21 96       	adiw	r28, 0x01	; 1
+ 19c:	90 93 4d 02 	sts	0x024D, r25	; 0x80024d <DATA>
+ 1a0:	ab df       	rcall	.-170    	; 0xf8 <LCD_Write_Data>
+ 1a2:	99 91       	ld	r25, Y+
+ 1a4:	91 11       	cpse	r25, r1
+ 1a6:	fa cf       	rjmp	.-12     	; 0x19c <LCD_Puts+0xe>
+ 1a8:	df 91       	pop	r29
+ 1aa:	cf 91       	pop	r28
+ 1ac:	08 95       	ret
+
+000001ae <Banner>:
+ 1ae:	8f e2       	ldi	r24, 0x2F	; 47
+ 1b0:	92 e0       	ldi	r25, 0x02	; 2
+ 1b2:	dd df       	rcall	.-70     	; 0x16e <UART_Puts>
+ 1b4:	88 ef       	ldi	r24, 0xF8	; 248
+ 1b6:	91 e0       	ldi	r25, 0x01	; 1
+ 1b8:	da df       	rcall	.-76     	; 0x16e <UART_Puts>
+ 1ba:	84 ec       	ldi	r24, 0xC4	; 196
+ 1bc:	91 e0       	ldi	r25, 0x01	; 1
+ 1be:	d7 cf       	rjmp	.-82     	; 0x16e <UART_Puts>
+ 1c0:	08 95       	ret
+
+000001c2 <LCD>:
+
+/**
+*LCD
+*/
+void LCD(void)						//Lite LCD demo
+{
+ 1c2:	cf 93       	push	r28
+ 1c4:	df 93       	push	r29
+	DATA = 0x34;					//Sets data bits in LCD
+ 1c6:	84 e3       	ldi	r24, 0x34	; 52
+ 1c8:	80 93 4d 02 	sts	0x024D, r24	; 0x80024d <DATA>
+	LCD_Write_Command();
+ 1cc:	81 df       	rcall	.-254    	; 0xd0 <LCD_Write_Command>
+	DATA = 0x08;					//Clearing display without clearing DDRAM content
+ 1ce:	88 e0       	ldi	r24, 0x08	; 8
+ 1d0:	80 93 4d 02 	sts	0x024D, r24	; 0x80024d <DATA>
+	LCD_Write_Command();
+ 1d4:	7d df       	rcall	.-262    	; 0xd0 <LCD_Write_Command>
+	DATA = 0x02;					//Set cursor position to 0
+ 1d6:	82 e0       	ldi	r24, 0x02	; 2
+ 1d8:	80 93 4d 02 	sts	0x024D, r24	; 0x80024d <DATA>
+	LCD_Write_Command();
+ 1dc:	79 df       	rcall	.-270    	; 0xd0 <LCD_Write_Command>
+	DATA = 0x06;					//Entry Mode
+ 1de:	86 e0       	ldi	r24, 0x06	; 6
+ 1e0:	80 93 4d 02 	sts	0x024D, r24	; 0x80024d <DATA>
+	LCD_Write_Command();
+	DATA = 0x0f;					//Display on cursor blinking
+ 1e4:	75 df       	rcall	.-278    	; 0xd0 <LCD_Write_Command>
+ 1e6:	8f e0       	ldi	r24, 0x0F	; 15
+	LCD_Write_Command();
+ 1e8:	80 93 4d 02 	sts	0x024D, r24	; 0x80024d <DATA>
+	LCD_Puts(teamName);
+ 1ec:	71 df       	rcall	.-286    	; 0xd0 <LCD_Write_Command>
+ 1ee:	8d e7       	ldi	r24, 0x7D	; 125
+ 1f0:	91 e0       	ldi	r25, 0x01	; 1
+ 1f2:	cd df       	rcall	.-102    	; 0x18e <LCD_Puts>
+	ASCII = '\0';
+ 1f4:	10 92 50 02 	sts	0x0250, r1	; 0x800250 <ASCII>
+	while (ASCII == '\0') {
+		for (count = 0; count < 40; count ++) {
+			DATA = 0x18;
+ 1f8:	c8 e1       	ldi	r28, 0x18	; 24
+				DATA = 0x01;
+				LCD_Write_Command();
+				return;
+			}
+		}
+		DATA = 0x02;
+ 1fa:	d2 e0       	ldi	r29, 0x02	; 2
+	DATA = 0x0f;					//Display on cursor blinking
+	LCD_Write_Command();
+	LCD_Puts(teamName);
+	ASCII = '\0';
+	while (ASCII == '\0') {
+		for (count = 0; count < 40; count ++) {
+ 1fc:	10 92 52 02 	sts	0x0252, r1	; 0x800252 <count+0x1>
+ 200:	10 92 51 02 	sts	0x0251, r1	; 0x800251 <count>
+			DATA = 0x18;
+ 204:	c0 93 4d 02 	sts	0x024D, r28	; 0x80024d <DATA>
+			LCD_Write_Command();
+ 208:	63 df       	rcall	.-314    	; 0xd0 <LCD_Write_Command>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 20a:	2f ef       	ldi	r18, 0xFF	; 255
+ 20c:	83 ec       	ldi	r24, 0xC3	; 195
+ 20e:	99 e0       	ldi	r25, 0x09	; 9
+ 210:	21 50       	subi	r18, 0x01	; 1
+ 212:	80 40       	sbci	r24, 0x00	; 0
+ 214:	90 40       	sbci	r25, 0x00	; 0
+ 216:	e1 f7       	brne	.-8      	; 0x210 <LCD+0x4e>
+ 218:	00 c0       	rjmp	.+0      	; 0x21a <LCD+0x58>
+ 21a:	00 00       	nop
+			_delay_ms(200);
+			
+			asm("lds r16,0xC6"); // check what ASCII value is being stored
+ 21c:	00 91 c6 00 	lds	r16, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
+			asm("sts ASCII,r16");
+ 220:	00 93 50 02 	sts	0x0250, r16	; 0x800250 <ASCII>
+
+			if (ASCII != '\0') {
+ 224:	80 91 50 02 	lds	r24, 0x0250	; 0x800250 <ASCII>
+ 228:	88 23       	and	r24, r24
+				DATA = 0x01;
+ 22a:	29 f0       	breq	.+10     	; 0x236 <LCD+0x74>
+ 22c:	81 e0       	ldi	r24, 0x01	; 1
+ 22e:	80 93 4d 02 	sts	0x024D, r24	; 0x80024d <DATA>
+				LCD_Write_Command();
+ 232:	4e df       	rcall	.-356    	; 0xd0 <LCD_Write_Command>
+				return;
+ 234:	12 c0       	rjmp	.+36     	; 0x25a <LCD+0x98>
+	DATA = 0x0f;					//Display on cursor blinking
+	LCD_Write_Command();
+	LCD_Puts(teamName);
+	ASCII = '\0';
+	while (ASCII == '\0') {
+		for (count = 0; count < 40; count ++) {
+ 236:	80 91 51 02 	lds	r24, 0x0251	; 0x800251 <count>
+ 23a:	90 91 52 02 	lds	r25, 0x0252	; 0x800252 <count+0x1>
+ 23e:	01 96       	adiw	r24, 0x01	; 1
+ 240:	90 93 52 02 	sts	0x0252, r25	; 0x800252 <count+0x1>
+ 244:	80 93 51 02 	sts	0x0251, r24	; 0x800251 <count>
+ 248:	88 97       	sbiw	r24, 0x28	; 40
+				DATA = 0x01;
+				LCD_Write_Command();
+				return;
+			}
+		}
+		DATA = 0x02;
+ 24a:	e0 f2       	brcs	.-72     	; 0x204 <LCD+0x42>
+ 24c:	d0 93 4d 02 	sts	0x024D, r29	; 0x80024d <DATA>
+		LCD_Write_Command();
+ 250:	3f df       	rcall	.-386    	; 0xd0 <LCD_Write_Command>
+	LCD_Write_Command();
+	DATA = 0x0f;					//Display on cursor blinking
+	LCD_Write_Command();
+	LCD_Puts(teamName);
+	ASCII = '\0';
+	while (ASCII == '\0') {
+ 252:	80 91 50 02 	lds	r24, 0x0250	; 0x800250 <ASCII>
+ 256:	88 23       	and	r24, r24
+ 258:	89 f2       	breq	.-94     	; 0x1fc <LCD+0x3a>
+		}
+		DATA = 0x02;
+		LCD_Write_Command();
+	}
+	return;
+} // end LCD
+ 25a:	df 91       	pop	r29
+ 25c:	cf 91       	pop	r28
+ 25e:	08 95       	ret
+
+00000260 <USART>:
+*/
+void USART(void) {
+	int dataBits = 0;
+	int parity = 0;
+	int stopBits = 0;
+	UART_Puts("\r\nSelect what you would like to change\r\n");
+ 260:	80 e0       	ldi	r24, 0x00	; 0
+ 262:	91 e0       	ldi	r25, 0x01	; 1
+ 264:	84 df       	rcall	.-248    	; 0x16e <UART_Puts>
+	UART_Puts("\r\n(1)Baud Rate (2)Character Size (3)Parity (4)Stop bits (ESC) Menu\r\n");
+ 266:	89 e2       	ldi	r24, 0x29	; 41
+ 268:	91 e0       	ldi	r25, 0x01	; 1
+	UART_Get();
+ 26a:	81 df       	rcall	.-254    	; 0x16e <UART_Puts>
+ 26c:	6e df       	rcall	.-292    	; 0x14a <UART_Get>
+	switch(ASCII) {
+ 26e:	80 91 50 02 	lds	r24, 0x0250	; 0x800250 <ASCII>
+ 272:	8b 31       	cpi	r24, 0x1B	; 27
+		case 27:
+		return;
+		default: UART_Puts("Invalid Option");
+ 274:	19 f0       	breq	.+6      	; 0x27c <USART+0x1c>
+ 276:	8e e6       	ldi	r24, 0x6E	; 110
+ 278:	91 e0       	ldi	r25, 0x01	; 1
+ 27a:	79 cf       	rjmp	.-270    	; 0x16e <UART_Puts>
+ 27c:	08 95       	ret
+
+0000027e <Command>:
+/**
+* command interpreter
+*/
+void Command(void)
+{
+	UART_Puts(MS3);
+ 27e:	8e ec       	ldi	r24, 0xCE	; 206
+ 280:	91 e0       	ldi	r25, 0x01	; 1
+ 282:	75 df       	rcall	.-278    	; 0x16e <UART_Puts>
+	ASCII = '\0';
+ 284:	10 92 50 02 	sts	0x0250, r1	; 0x800250 <ASCII>
 	while (ASCII == '\0')
 	{
 		UART_Get();
- 20e:	a6 df       	rcall	.-180    	; 0x15c <UART_Get>
-
-void Command(void)					//command interpreter
+ 288:	60 df       	rcall	.-320    	; 0x14a <UART_Get>
+*/
+void Command(void)
 {
 	UART_Puts(MS3);
-	ASCII = '\0';						
+	ASCII = '\0';
 	while (ASCII == '\0')
- 210:	80 91 ae 01 	lds	r24, 0x01AE	; 0x8001ae <ASCII>
- 214:	88 23       	and	r24, r24
- 216:	d9 f3       	breq	.-10     	; 0x20e <Command+0xa>
+ 28a:	80 91 50 02 	lds	r24, 0x0250	; 0x800250 <ASCII>
+ 28e:	88 23       	and	r24, r24
+ 290:	d9 f3       	breq	.-10     	; 0x288 <Command+0xa>
 	{
 		UART_Get();
 	}
 	switch (ASCII)
- 218:	8c 36       	cpi	r24, 0x6C	; 108
+ 292:	85 35       	cpi	r24, 0x55	; 85
+ 294:	59 f0       	breq	.+22     	; 0x2ac <Command+0x2e>
+ 296:	18 f4       	brcc	.+6      	; 0x29e <Command+0x20>
+ 298:	8c 34       	cpi	r24, 0x4C	; 76
+ 29a:	31 f0       	breq	.+12     	; 0x2a8 <Command+0x2a>
+ 29c:	09 c0       	rjmp	.+18     	; 0x2b0 <Command+0x32>
+ 29e:	8c 36       	cpi	r24, 0x6C	; 108
+ 2a0:	19 f0       	breq	.+6      	; 0x2a8 <Command+0x2a>
+ 2a2:	85 37       	cpi	r24, 0x75	; 117
+ 2a4:	19 f0       	breq	.+6      	; 0x2ac <Command+0x2e>
 	{
-		case 'L' | 'l': LCD();
- 21a:	11 f4       	brne	.+4      	; 0x220 <Command+0x1c>
- 21c:	db cf       	rjmp	.-74     	; 0x1d4 <LCD>
+		case 'l':
+		case 'L':
+		LCD();
+ 2a6:	04 c0       	rjmp	.+8      	; 0x2b0 <Command+0x32>
 		break;
+ 2a8:	8c cf       	rjmp	.-232    	; 0x1c2 <LCD>
+		case 'u':
+		case 'U':
+		USART();
+ 2aa:	08 95       	ret
+		break;
+ 2ac:	d9 cf       	rjmp	.-78     	; 0x260 <USART>
 		default:
 		UART_Puts(MS5);
- 21e:	08 95       	ret
- 220:	8e e0       	ldi	r24, 0x0E	; 14
- 222:	91 e0       	ldi	r25, 0x01	; 1
- 224:	ad cf       	rjmp	.-166    	; 0x180 <UART_Puts>
- 226:	08 95       	ret
+ 2ae:	08 95       	ret
+ 2b0:	85 ea       	ldi	r24, 0xA5	; 165
+ 2b2:	91 e0       	ldi	r25, 0x01	; 1
+ 2b4:	5c cf       	rjmp	.-328    	; 0x16e <UART_Puts>
+ 2b6:	08 95       	ret
 
-00000228 <main>:
-	}
-}
-
+000002b8 <main>:
+/**
+* main
+*/
 int main(void)
 {
 	Mega328P_Init();
- 228:	3b df       	rcall	.-394    	; 0xa0 <Mega328P_Init>
+ 2b8:	f3 de       	rcall	.-538    	; 0xa0 <Mega328P_Init>
 	Banner();
- 22a:	ca df       	rcall	.-108    	; 0x1c0 <Banner>
+ 2ba:	79 df       	rcall	.-270    	; 0x1ae <Banner>
 	while (1)
 	{
 		Command();				//infinite command loop
- 22c:	eb df       	rcall	.-42     	; 0x204 <Command>
- 22e:	fe cf       	rjmp	.-4      	; 0x22c <main+0x4>
+ 2bc:	e0 df       	rcall	.-64     	; 0x27e <Command>
+ 2be:	fe cf       	rjmp	.-4      	; 0x2bc <main+0x4>
 
-00000230 <_exit>:
- 230:	f8 94       	cli
+000002c0 <_exit>:
+ 2c0:	f8 94       	cli
 
-00000232 <__stop_program>:
- 232:	ff cf       	rjmp	.-2      	; 0x232 <__stop_program>
+000002c2 <__stop_program>:
+ 2c2:	ff cf       	rjmp	.-2      	; 0x2c2 <__stop_program>
