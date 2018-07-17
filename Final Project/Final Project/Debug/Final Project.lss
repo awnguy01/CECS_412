@@ -1,0 +1,557 @@
+
+Final Project.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         000000ac  00800100  00000234  000002c8  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000234  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          0000000b  008001ac  008001ac  00000374  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000374  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000003a4  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000068  00000000  00000000  000003e8  2**3
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000a58  00000000  00000000  00000450  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 000006e6  00000000  00000000  00000ea8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000004f3  00000000  00000000  0000158e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  0000008c  00000000  00000000  00001a84  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00002dd5  00000000  00000000  00001b10  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    000000c8  00000000  00000000  000048e5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000038  00000000  00000000  000049ad  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_macro  00000011  00000000  00000000  000049e5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	33 c0       	rjmp	.+102    	; 0x68 <__ctors_end>
+   2:	00 00       	nop
+   4:	4c c0       	rjmp	.+152    	; 0x9e <__bad_interrupt>
+   6:	00 00       	nop
+   8:	4a c0       	rjmp	.+148    	; 0x9e <__bad_interrupt>
+   a:	00 00       	nop
+   c:	48 c0       	rjmp	.+144    	; 0x9e <__bad_interrupt>
+   e:	00 00       	nop
+  10:	46 c0       	rjmp	.+140    	; 0x9e <__bad_interrupt>
+  12:	00 00       	nop
+  14:	44 c0       	rjmp	.+136    	; 0x9e <__bad_interrupt>
+  16:	00 00       	nop
+  18:	42 c0       	rjmp	.+132    	; 0x9e <__bad_interrupt>
+  1a:	00 00       	nop
+  1c:	40 c0       	rjmp	.+128    	; 0x9e <__bad_interrupt>
+  1e:	00 00       	nop
+  20:	3e c0       	rjmp	.+124    	; 0x9e <__bad_interrupt>
+  22:	00 00       	nop
+  24:	3c c0       	rjmp	.+120    	; 0x9e <__bad_interrupt>
+  26:	00 00       	nop
+  28:	3a c0       	rjmp	.+116    	; 0x9e <__bad_interrupt>
+  2a:	00 00       	nop
+  2c:	38 c0       	rjmp	.+112    	; 0x9e <__bad_interrupt>
+  2e:	00 00       	nop
+  30:	36 c0       	rjmp	.+108    	; 0x9e <__bad_interrupt>
+  32:	00 00       	nop
+  34:	34 c0       	rjmp	.+104    	; 0x9e <__bad_interrupt>
+  36:	00 00       	nop
+  38:	32 c0       	rjmp	.+100    	; 0x9e <__bad_interrupt>
+  3a:	00 00       	nop
+  3c:	30 c0       	rjmp	.+96     	; 0x9e <__bad_interrupt>
+  3e:	00 00       	nop
+  40:	2e c0       	rjmp	.+92     	; 0x9e <__bad_interrupt>
+  42:	00 00       	nop
+  44:	2c c0       	rjmp	.+88     	; 0x9e <__bad_interrupt>
+  46:	00 00       	nop
+  48:	2a c0       	rjmp	.+84     	; 0x9e <__bad_interrupt>
+  4a:	00 00       	nop
+  4c:	28 c0       	rjmp	.+80     	; 0x9e <__bad_interrupt>
+  4e:	00 00       	nop
+  50:	26 c0       	rjmp	.+76     	; 0x9e <__bad_interrupt>
+  52:	00 00       	nop
+  54:	24 c0       	rjmp	.+72     	; 0x9e <__bad_interrupt>
+  56:	00 00       	nop
+  58:	22 c0       	rjmp	.+68     	; 0x9e <__bad_interrupt>
+  5a:	00 00       	nop
+  5c:	20 c0       	rjmp	.+64     	; 0x9e <__bad_interrupt>
+  5e:	00 00       	nop
+  60:	1e c0       	rjmp	.+60     	; 0x9e <__bad_interrupt>
+  62:	00 00       	nop
+  64:	1c c0       	rjmp	.+56     	; 0x9e <__bad_interrupt>
+	...
+
+00000068 <__ctors_end>:
+  68:	11 24       	eor	r1, r1
+  6a:	1f be       	out	0x3f, r1	; 63
+  6c:	cf ef       	ldi	r28, 0xFF	; 255
+  6e:	d8 e0       	ldi	r29, 0x08	; 8
+  70:	de bf       	out	0x3e, r29	; 62
+  72:	cd bf       	out	0x3d, r28	; 61
+
+00000074 <__do_copy_data>:
+  74:	11 e0       	ldi	r17, 0x01	; 1
+  76:	a0 e0       	ldi	r26, 0x00	; 0
+  78:	b1 e0       	ldi	r27, 0x01	; 1
+  7a:	e4 e3       	ldi	r30, 0x34	; 52
+  7c:	f2 e0       	ldi	r31, 0x02	; 2
+  7e:	02 c0       	rjmp	.+4      	; 0x84 <DIDR1+0x5>
+  80:	05 90       	lpm	r0, Z+
+  82:	0d 92       	st	X+, r0
+  84:	ac 3a       	cpi	r26, 0xAC	; 172
+  86:	b1 07       	cpc	r27, r17
+  88:	d9 f7       	brne	.-10     	; 0x80 <DIDR1+0x1>
+
+0000008a <__do_clear_bss>:
+  8a:	21 e0       	ldi	r18, 0x01	; 1
+  8c:	ac ea       	ldi	r26, 0xAC	; 172
+  8e:	b1 e0       	ldi	r27, 0x01	; 1
+  90:	01 c0       	rjmp	.+2      	; 0x94 <.do_clear_bss_start>
+
+00000092 <.do_clear_bss_loop>:
+  92:	1d 92       	st	X+, r1
+
+00000094 <.do_clear_bss_start>:
+  94:	a7 3b       	cpi	r26, 0xB7	; 183
+  96:	b2 07       	cpc	r27, r18
+  98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
+  9a:	c6 d0       	rcall	.+396    	; 0x228 <main>
+  9c:	c9 c0       	rjmp	.+402    	; 0x230 <_exit>
+
+0000009e <__bad_interrupt>:
+  9e:	b0 cf       	rjmp	.-160    	; 0x0 <__vectors>
+
+000000a0 <Mega328P_Init>:
+.set	temp,0				//student comment here
+
+.section ".text"			//student comment here
+.global Mega328P_Init
+Mega328P_Init:
+		ldi	r16,0x07		;PB0(R*W),PB1(RS),PB2(E) as fixed outputs
+  a0:	07 e0       	ldi	r16, 0x07	; 7
+		out	DDRB,r16		//student comment here
+  a2:	04 b9       	out	0x04, r16	; 4
+		ldi	r16,0			//student comment here
+  a4:	00 e0       	ldi	r16, 0x00	; 0
+		out	PORTB,r16		//student comment here
+  a6:	05 b9       	out	0x05, r16	; 5
+		out	U2X0,r16		;initialize UART, 8bits, no parity, 1 stop, 9600
+  a8:	01 b9       	out	0x01, r16	; 1
+		ldi	r17,0x0			//student comment here
+  aa:	10 e0       	ldi	r17, 0x00	; 0
+		ldi	r16,0x67		//student comment here
+  ac:	07 e6       	ldi	r16, 0x67	; 103
+		sts	UBRR0H,r17		//student comment here
+  ae:	10 93 c5 00 	sts	0x00C5, r17	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7e00c5>
+		sts	UBRR0L,r16		//student comment here
+  b2:	00 93 c4 00 	sts	0x00C4, r16	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7e00c4>
+		ldi	r16,24			//student comment here
+  b6:	08 e1       	ldi	r16, 0x18	; 24
+		sts	UCSR0B,r16		//student comment here
+  b8:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
+		ldi	r16,6			//student comment here
+  bc:	06 e0       	ldi	r16, 0x06	; 6
+		sts	UCSR0C,r16		//student comment here
+  be:	00 93 c2 00 	sts	0x00C2, r16	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7e00c2>
+		ldi r16,0x87		//initialize ADC
+  c2:	07 e8       	ldi	r16, 0x87	; 135
+		sts	ADCSRA,r16		//student comment here
+  c4:	00 93 7a 00 	sts	0x007A, r16	; 0x80007a <__TEXT_REGION_LENGTH__+0x7e007a>
+		ldi r16,0x40		//student comment here
+  c8:	00 e4       	ldi	r16, 0x40	; 64
+		sts ADMUX,r16		//student comment here
+  ca:	00 93 7c 00 	sts	0x007C, r16	; 0x80007c <__TEXT_REGION_LENGTH__+0x7e007c>
+		ldi r16,0			//student comment here
+  ce:	00 e0       	ldi	r16, 0x00	; 0
+		sts ADCSRB,r16		//student comment here
+  d0:	00 93 7b 00 	sts	0x007B, r16	; 0x80007b <__TEXT_REGION_LENGTH__+0x7e007b>
+		ldi r16,0xFE		//student comment here
+  d4:	0e ef       	ldi	r16, 0xFE	; 254
+		sts DIDR0,r16		//student comment here
+  d6:	00 93 7e 00 	sts	0x007E, r16	; 0x80007e <__TEXT_REGION_LENGTH__+0x7e007e>
+		ldi r16,0xFF		//student comment here
+  da:	0f ef       	ldi	r16, 0xFF	; 255
+		sts DIDR1,r16		//student comment here
+  dc:	00 93 7f 00 	sts	0x007F, r16	; 0x80007f <__TEXT_REGION_LENGTH__+0x7e007f>
+		ret					//student comment here
+  e0:	08 95       	ret
+
+000000e2 <LCD_Write_Command>:
+	
+.global LCD_Write_Command
+LCD_Write_Command:
+	call	UART_Off		//student comment here
+  e2:	31 d0       	rcall	.+98     	; 0x146 <UART_Off>
+	ldi		r16,0xFF		;PD0 - PD7 as outputs
+  e4:	0f ef       	ldi	r16, 0xFF	; 255
+	out		DDRD,r16		//student comment here
+  e6:	0a b9       	out	0x0a, r16	; 10
+	lds		r16,DATA		//student comment here
+  e8:	00 91 ac 01 	lds	r16, 0x01AC	; 0x8001ac <__data_end>
+	out		PORTD,r16		//student comment here
+  ec:	0b b9       	out	0x0b, r16	; 11
+	ldi		r16,4			//student comment here
+  ee:	04 e0       	ldi	r16, 0x04	; 4
+	out		PORTB,r16		//student comment here
+	call	LCD_Delay		//student comment here
+  f0:	05 b9       	out	0x05, r16	; 5
+  f2:	04 d0       	rcall	.+8      	; 0xfc <LCD_Delay>
+	ldi		r16,0			//student comment here
+	out		PORTB,r16		//student comment here
+	call	LCD_Delay		//student comment here
+  f4:	00 e0       	ldi	r16, 0x00	; 0
+  f6:	05 b9       	out	0x05, r16	; 5
+	call	UART_On			//student comment here
+  f8:	01 d0       	rcall	.+2      	; 0xfc <LCD_Delay>
+  fa:	1f c0       	rjmp	.+62     	; 0x13a <UART_On>
+
+000000fc <LCD_Delay>:
+	ret						//student comment here
+  fc:	0a ef       	ldi	r16, 0xFA	; 250
+
+000000fe <D0>:
+
+LCD_Delay:
+	ldi		r16,0xFA		//student comment here
+  fe:	1f ef       	ldi	r17, 0xFF	; 255
+
+00000100 <D1>:
+D0:	ldi		r17,0xFF		//student comment here
+ 100:	1a 95       	dec	r17
+D1:	dec		r17				//student comment here
+ 102:	f1 f7       	brne	.-4      	; 0x100 <D1>
+	brne	D1				//student comment here
+	dec		r16				//student comment here
+ 104:	0a 95       	dec	r16
+	brne	D0				//student comment here
+ 106:	d9 f7       	brne	.-10     	; 0xfe <D0>
+	ret						//student comment here
+ 108:	08 95       	ret
+
+0000010a <LCD_Write_Data>:
+
+.global LCD_Write_Data
+LCD_Write_Data:
+	call	UART_Off		//student comment here
+ 10a:	1d d0       	rcall	.+58     	; 0x146 <UART_Off>
+ 10c:	0f ef       	ldi	r16, 0xFF	; 255
+	ldi		r16,0xFF		//student comment here
+ 10e:	0a b9       	out	0x0a, r16	; 10
+	out		DDRD,r16		//student comment here
+ 110:	00 91 ac 01 	lds	r16, 0x01AC	; 0x8001ac <__data_end>
+	lds		r16,DATA		//student comment here
+	out		PORTD,r16		//student comment here
+ 114:	0b b9       	out	0x0b, r16	; 11
+	ldi		r16,6			//student comment here
+	out		PORTB,r16		//student comment here
+	call	LCD_Delay		//student comment here
+ 116:	06 e0       	ldi	r16, 0x06	; 6
+	ldi		r16,0			//student comment here
+ 118:	05 b9       	out	0x05, r16	; 5
+	out		PORTB,r16		//student comment here
+ 11a:	f0 df       	rcall	.-32     	; 0xfc <LCD_Delay>
+	call	LCD_Delay		//student comment here
+ 11c:	00 e0       	ldi	r16, 0x00	; 0
+ 11e:	05 b9       	out	0x05, r16	; 5
+	call	UART_On			//student comment here
+ 120:	ed df       	rcall	.-38     	; 0xfc <LCD_Delay>
+ 122:	0b c0       	rjmp	.+22     	; 0x13a <UART_On>
+	ret						//student comment here
+ 124:	08 95       	ret
+
+00000126 <LCD_Read_Data>:
+
+.global LCD_Read_Data
+LCD_Read_Data:
+	call	UART_Off		//student comment here
+ 126:	0f d0       	rcall	.+30     	; 0x146 <UART_Off>
+	ldi		r16,0x00		//student comment here
+ 128:	00 e0       	ldi	r16, 0x00	; 0
+	out		DDRD,r16		//student comment here
+ 12a:	0a b9       	out	0x0a, r16	; 10
+	out		PORTB,4			//student comment here
+ 12c:	45 b8       	out	0x05, r4	; 5
+	in		r16,PORTD		//student comment here
+ 12e:	0b b1       	in	r16, 0x0b	; 11
+	sts		DATA,r16		//student comment here
+ 130:	00 93 ac 01 	sts	0x01AC, r16	; 0x8001ac <__data_end>
+	out		PORTB,0			//student comment here
+ 134:	05 b8       	out	0x05, r0	; 5
+	call	UART_On			//student comment here
+ 136:	01 c0       	rjmp	.+2      	; 0x13a <UART_On>
+ 138:	08 95       	ret
+
+0000013a <UART_On>:
+	ret						//student comment here
+ 13a:	02 e0       	ldi	r16, 0x02	; 2
+
+.global UART_On
+UART_On:
+	ldi		r16,2				//student comment here
+ 13c:	0a b9       	out	0x0a, r16	; 10
+	out		DDRD,r16			//student comment here
+ 13e:	08 e1       	ldi	r16, 0x18	; 24
+	ldi		r16,24				//student comment here
+ 140:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
+	sts		UCSR0B,r16			//student comment here
+ 144:	08 95       	ret
+
+00000146 <UART_Off>:
+	ret							//student comment here
+ 146:	00 e0       	ldi	r16, 0x00	; 0
+
+.global UART_Off
+UART_Off:
+	ldi	r16,0					//student comment here
+ 148:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
+	sts UCSR0B,r16				//student comment here
+ 14c:	08 95       	ret
+
+0000014e <UART_Clear>:
+	ret							//student comment here
+ 14e:	00 91 c0 00 	lds	r16, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
+
+.global UART_Clear
+UART_Clear:
+	lds		r16,UCSR0A			//student comment here
+ 152:	07 ff       	sbrs	r16, 7
+	sbrs	r16,RXC0			//student comment here
+ 154:	08 95       	ret
+	ret							//student comment here
+ 156:	00 91 c6 00 	lds	r16, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
+	lds		r16,UDR0			//student comment here
+ 15a:	f9 cf       	rjmp	.-14     	; 0x14e <UART_Clear>
+
+0000015c <UART_Get>:
+	rjmp	UART_Clear			//student comment here
+ 15c:	00 91 c0 00 	lds	r16, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
+
+.global UART_Get
+UART_Get:
+	lds		r16,UCSR0A			//student comment here
+ 160:	07 ff       	sbrs	r16, 7
+	sbrs	r16,RXC0			//student comment here
+ 162:	fc cf       	rjmp	.-8      	; 0x15c <UART_Get>
+	rjmp	UART_Get			//student comment here
+ 164:	00 91 c6 00 	lds	r16, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
+	lds		r16,UDR0			//student comment here
+ 168:	00 93 ae 01 	sts	0x01AE, r16	; 0x8001ae <ASCII>
+	sts		ASCII,r16			//student comment here
+ 16c:	08 95       	ret
+
+0000016e <UART_Put>:
+	ret							//student comment here
+ 16e:	10 91 c0 00 	lds	r17, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
+
+.global UART_Put
+UART_Put:
+	lds		r17,UCSR0A			//student comment here
+ 172:	15 ff       	sbrs	r17, 5
+	sbrs	r17,UDRE0			//student comment here
+ 174:	fc cf       	rjmp	.-8      	; 0x16e <UART_Put>
+	rjmp	UART_Put			//student comment here
+ 176:	00 91 ae 01 	lds	r16, 0x01AE	; 0x8001ae <ASCII>
+	lds		r16,ASCII			//student comment here
+ 17a:	00 93 c6 00 	sts	0x00C6, r16	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
+	sts		UDR0,r16			//student comment here
+ 17e:	08 95       	ret
+
+00000180 <UART_Puts>:
+
+char volts[5];					//string buffer for ADC output
+int Acc;						//Accumulator for ADC use
+
+void UART_Puts(const char *str)	//Display a string in the PC Terminal Program
+{
+ 180:	cf 93       	push	r28
+ 182:	df 93       	push	r29
+ 184:	ec 01       	movw	r28, r24
+	while (*str)
+ 186:	98 81       	ld	r25, Y
+ 188:	99 23       	and	r25, r25
+ 18a:	39 f0       	breq	.+14     	; 0x19a <UART_Puts+0x1a>
+ 18c:	21 96       	adiw	r28, 0x01	; 1
+	{
+		ASCII = *str++;
+ 18e:	90 93 ae 01 	sts	0x01AE, r25	; 0x8001ae <ASCII>
+		UART_Put();
+ 192:	ed df       	rcall	.-38     	; 0x16e <UART_Put>
+char volts[5];					//string buffer for ADC output
+int Acc;						//Accumulator for ADC use
+
+void UART_Puts(const char *str)	//Display a string in the PC Terminal Program
+{
+	while (*str)
+ 194:	99 91       	ld	r25, Y+
+ 196:	91 11       	cpse	r25, r1
+ 198:	fa cf       	rjmp	.-12     	; 0x18e <UART_Puts+0xe>
+	{
+		ASCII = *str++;
+		UART_Put();
+	}
+}
+ 19a:	df 91       	pop	r29
+ 19c:	cf 91       	pop	r28
+ 19e:	08 95       	ret
+
+000001a0 <LCD_Puts>:
+
+void LCD_Puts(const char *str)	//Display a string on the LCD Module
+{
+ 1a0:	cf 93       	push	r28
+ 1a2:	df 93       	push	r29
+ 1a4:	ec 01       	movw	r28, r24
+	while (*str)
+ 1a6:	98 81       	ld	r25, Y
+ 1a8:	99 23       	and	r25, r25
+ 1aa:	39 f0       	breq	.+14     	; 0x1ba <LCD_Puts+0x1a>
+ 1ac:	21 96       	adiw	r28, 0x01	; 1
+	{
+		DATA = *str++;
+ 1ae:	90 93 ac 01 	sts	0x01AC, r25	; 0x8001ac <__data_end>
+		LCD_Write_Data();
+ 1b2:	ab df       	rcall	.-170    	; 0x10a <LCD_Write_Data>
+	}
+}
+
+void LCD_Puts(const char *str)	//Display a string on the LCD Module
+{
+	while (*str)
+ 1b4:	99 91       	ld	r25, Y+
+ 1b6:	91 11       	cpse	r25, r1
+ 1b8:	fa cf       	rjmp	.-12     	; 0x1ae <LCD_Puts+0xe>
+	{
+		DATA = *str++;
+		LCD_Write_Data();
+	}
+}
+ 1ba:	df 91       	pop	r29
+ 1bc:	cf 91       	pop	r28
+ 1be:	08 95       	ret
+
+000001c0 <Banner>:
+
+
+void Banner(void)				//Display Tiny OS Banner on Terminal
+{
+	UART_Puts(MS1);
+ 1c0:	8f e8       	ldi	r24, 0x8F	; 143
+ 1c2:	91 e0       	ldi	r25, 0x01	; 1
+ 1c4:	dd df       	rcall	.-70     	; 0x180 <UART_Puts>
+	UART_Puts(MS2);
+ 1c6:	88 e5       	ldi	r24, 0x58	; 88
+ 1c8:	91 e0       	ldi	r25, 0x01	; 1
+ 1ca:	da df       	rcall	.-76     	; 0x180 <UART_Puts>
+	UART_Puts(MS4);
+ 1cc:	8d e2       	ldi	r24, 0x2D	; 45
+ 1ce:	91 e0       	ldi	r25, 0x01	; 1
+ 1d0:	d7 cf       	rjmp	.-82     	; 0x180 <UART_Puts>
+ 1d2:	08 95       	ret
+
+000001d4 <LCD>:
+}
+
+void LCD(void)						//Lite LCD demo
+{
+	DATA = 0x34;					//Student Comment Here
+ 1d4:	84 e3       	ldi	r24, 0x34	; 52
+ 1d6:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
+	LCD_Write_Command();
+ 1da:	83 df       	rcall	.-250    	; 0xe2 <LCD_Write_Command>
+	DATA = 0x08;					//Student Comment Here
+ 1dc:	88 e0       	ldi	r24, 0x08	; 8
+ 1de:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
+	LCD_Write_Command();
+ 1e2:	7f df       	rcall	.-258    	; 0xe2 <LCD_Write_Command>
+	DATA = 0x02;					//Student Comment Here
+ 1e4:	82 e0       	ldi	r24, 0x02	; 2
+ 1e6:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
+	LCD_Write_Command();
+ 1ea:	7b df       	rcall	.-266    	; 0xe2 <LCD_Write_Command>
+	DATA = 0x06;					//Student Comment Here
+ 1ec:	86 e0       	ldi	r24, 0x06	; 6
+ 1ee:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
+	LCD_Write_Command();
+	DATA = 0x0f;					//Student Comment Here
+ 1f2:	77 df       	rcall	.-274    	; 0xe2 <LCD_Write_Command>
+ 1f4:	8f e0       	ldi	r24, 0x0F	; 15
+	LCD_Write_Command();
+ 1f6:	80 93 ac 01 	sts	0x01AC, r24	; 0x8001ac <__data_end>
+	LCD_Puts("Hello ECE412!");
+ 1fa:	73 df       	rcall	.-282    	; 0xe2 <LCD_Write_Command>
+ 1fc:	80 e0       	ldi	r24, 0x00	; 0
+ 1fe:	91 e0       	ldi	r25, 0x01	; 1
+ 200:	cf cf       	rjmp	.-98     	; 0x1a0 <LCD_Puts>
+ 202:	08 95       	ret
+
+00000204 <Command>:
+	*/
+}
+
+void Command(void)					//command interpreter
+{
+	UART_Puts(MS3);
+ 204:	87 e3       	ldi	r24, 0x37	; 55
+ 206:	91 e0       	ldi	r25, 0x01	; 1
+ 208:	bb df       	rcall	.-138    	; 0x180 <UART_Puts>
+	ASCII = '\0';						
+ 20a:	10 92 ae 01 	sts	0x01AE, r1	; 0x8001ae <ASCII>
+	while (ASCII == '\0')
+	{
+		UART_Get();
+ 20e:	a6 df       	rcall	.-180    	; 0x15c <UART_Get>
+
+void Command(void)					//command interpreter
+{
+	UART_Puts(MS3);
+	ASCII = '\0';						
+	while (ASCII == '\0')
+ 210:	80 91 ae 01 	lds	r24, 0x01AE	; 0x8001ae <ASCII>
+ 214:	88 23       	and	r24, r24
+ 216:	d9 f3       	breq	.-10     	; 0x20e <Command+0xa>
+	{
+		UART_Get();
+	}
+	switch (ASCII)
+ 218:	8c 36       	cpi	r24, 0x6C	; 108
+	{
+		case 'L' | 'l': LCD();
+ 21a:	11 f4       	brne	.+4      	; 0x220 <Command+0x1c>
+ 21c:	db cf       	rjmp	.-74     	; 0x1d4 <LCD>
+		break;
+		default:
+		UART_Puts(MS5);
+ 21e:	08 95       	ret
+ 220:	8e e0       	ldi	r24, 0x0E	; 14
+ 222:	91 e0       	ldi	r25, 0x01	; 1
+ 224:	ad cf       	rjmp	.-166    	; 0x180 <UART_Puts>
+ 226:	08 95       	ret
+
+00000228 <main>:
+	}
+}
+
+int main(void)
+{
+	Mega328P_Init();
+ 228:	3b df       	rcall	.-394    	; 0xa0 <Mega328P_Init>
+	Banner();
+ 22a:	ca df       	rcall	.-108    	; 0x1c0 <Banner>
+	while (1)
+	{
+		Command();				//infinite command loop
+ 22c:	eb df       	rcall	.-42     	; 0x204 <Command>
+ 22e:	fe cf       	rjmp	.-4      	; 0x22c <main+0x4>
+
+00000230 <_exit>:
+ 230:	f8 94       	cli
+
+00000232 <__stop_program>:
+ 232:	ff cf       	rjmp	.-2      	; 0x232 <__stop_program>
