@@ -6,6 +6,7 @@
 
 
 .section ".data"				;start of the data section
+.equ	PINB,0X03
 .equ	DDRB,0x04				;DDRB (Data Direction Register B) set to 0x04 (00000100) which 
 									;sets pin 2 as an output
 .equ	DDRD,0x0A				;DDRD (Data Direction Register D) set to 0x0A (00001010) which
@@ -50,6 +51,13 @@ Mega328P_Init:
 		sts DIDR1,r16	  		;disables both AINx pins
 		ret				      	;return from subroutine
 	
+
+.global Detect_Press
+Detect_Press:
+	ldi		r16,1
+	sbis	PINB,7
+	sts		ASCII,r16
+	ret
 
 .global LCD_Write_Command
 LCD_Write_Command:

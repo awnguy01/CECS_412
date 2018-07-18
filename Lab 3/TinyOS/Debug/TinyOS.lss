@@ -303,58 +303,60 @@ Disassembly of section .text:
  1fa:	02 cf       	rjmp	.-508    	; 0x0 <__vectors>
 
 000001fc <Mega328P_Init>:
-.set	temp,0				//student comment here
+.set	temp,0					;sets the temp assembly variable to 0
 
-.section ".text"			//student comment here
+.section ".text"				;start of the text section
 .global Mega328P_Init
 Mega328P_Init:
-		ldi	r16,0x07		;PB0(R*W),PB1(RS),PB2(E) as fixed outputs
+		ldi	r16,0x07			;PB0(R*W),PB1(RS),PB2(E) as fixed outputs
  1fc:	07 e0       	ldi	r16, 0x07	; 7
-		out	DDRB,r16		//student comment here
+		out	DDRB,r16			;Sets Pins 0, 1, and 2 as outputs
  1fe:	04 b9       	out	0x04, r16	; 4
-		ldi	r16,0			//student comment here
+		ldi	r16,0			    ;R16 cleared to put out to port B
  200:	00 e0       	ldi	r16, 0x00	; 0
-		out	PORTB,r16		//student comment here
+		out	PORTB,r16			;Clears any data in I/O port B
  202:	05 b9       	out	0x05, r16	; 5
-		out	U2X0,r16		;initialize UART, 8bits, no parity, 1 stop, 9600
+		out	U2X0,r16	   		;initialize UART, 8bits, no parity, 1 stop, 9600
  204:	01 b9       	out	0x01, r16	; 1
-		ldi	r17,0x0			//storing the value of the high byte for 9600 Baud rate
+		ldi	r17,0x0		  		;storing the value of the high byte for 9600 Baud rate
  206:	10 e0       	ldi	r17, 0x00	; 0
-		ldi	r16,0x67		//storing the value of the low byte for 9600 Baud rate
+		ldi	r16,0x67			;storing the value of the low byte for 9600 Baud rate
  208:	07 e6       	ldi	r16, 0x67	; 103
-		sts	UBRR0H,r17		//setting the high byte for Baud rate
+		sts	UBRR0H,r17			;setting the high byte for Baud rate
  20a:	10 93 c5 00 	sts	0x00C5, r17	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7e00c5>
-		sts	UBRR0L,r16		//setting the low byte for Baud rate
+		sts	UBRR0L,r16			;setting the low byte for Baud rate
  20e:	00 93 c4 00 	sts	0x00C4, r16	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7e00c4>
-		ldi	r16,24			//value to enable the receiver and transmitter
+		ldi	r16,24		  		;value to enable the receiver and transmitter
  212:	08 e1       	ldi	r16, 0x18	; 24
-		sts	UCSR0B,r16		//enabling the receiver and transmitter
+		sts	UCSR0B,r16			;enabling the receiver and transmitter
  214:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
-		ldi	r16,6			//student comment here
+		ldi	r16,6			    ;storing the value to set the character size to 8-bits
  218:	06 e0       	ldi	r16, 0x06	; 6
-		sts	UCSR0C,r16		//student comment here
+		sts	UCSR0C,r16			;setting the character size to 8-bits
  21a:	00 93 c2 00 	sts	0x00C2, r16	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7e00c2>
-		ldi r16,0x87		//initialize ADC
+		ldi r16,0x87			;initialize ADC
  21e:	07 e8       	ldi	r16, 0x87	; 135
-		sts	ADCSRA,r16		//student comment here
+		sts	ADCSRA,r16			;sets ADC Enable and the division factor between the system 
  220:	00 93 7a 00 	sts	0x007A, r16	; 0x80007a <__TEXT_REGION_LENGTH__+0x7e007a>
-		ldi r16,0x40		//student comment here
+									;clock frequency and the input clock to the ADC to 128
+		ldi r16,0x40			;sets the voltage reference selection
  224:	00 e4       	ldi	r16, 0x40	; 64
-		sts ADMUX,r16		//student comment here
+		sts ADMUX,r16			;voltage reference selection set to AVCC with 
  226:	00 93 7c 00 	sts	0x007C, r16	; 0x80007c <__TEXT_REGION_LENGTH__+0x7e007c>
-		ldi r16,0			//student comment here
+									;external capacitor at AREF pin
+		ldi r16,0			    ;sets the ADC trigger source
  22a:	00 e0       	ldi	r16, 0x00	; 0
-		sts ADCSRB,r16		//student comment here
+		sts ADCSRB,r16			;ADC trigger source set to free running mode
  22c:	00 93 7b 00 	sts	0x007B, r16	; 0x80007b <__TEXT_REGION_LENGTH__+0x7e007b>
-		ldi r16,0xFE		//student comment here
+		ldi r16,0xFE			;sets which ADC pins have their digital input buffer disabled
  230:	0e ef       	ldi	r16, 0xFE	; 254
-		sts DIDR0,r16		//student comment here
+		sts DIDR0,r16	  		;disables all ADC pins except for ADC0D
  232:	00 93 7e 00 	sts	0x007E, r16	; 0x80007e <__TEXT_REGION_LENGTH__+0x7e007e>
-		ldi r16,0xFF		//student comment here
+		ldi r16,0xFF	  		;determines which AINx pins to disable
  236:	0f ef       	ldi	r16, 0xFF	; 255
-		sts DIDR1,r16		//student comment here
+		sts DIDR1,r16	  		;disables both AINx pins
  238:	00 93 7f 00 	sts	0x007F, r16	; 0x80007f <__TEXT_REGION_LENGTH__+0x7e007f>
-		ret					//student comment here
+		ret				      	;return from subroutine
  23c:	08 95       	ret
 
 0000023e <BAUD_Byte_Set>:
@@ -363,247 +365,254 @@ BAUD_Byte_Set:
 
 .global LCD_Write_Command
 LCD_Write_Command:
-	call	UART_Off		//student comment here
+	call	UART_Off			;turns off UART
  23e:	31 d0       	rcall	.+98     	; 0x2a2 <UART_Off>
-	ldi		r16,0xFF		;PD0 - PD7 as outputs
+	ldi		r16,0xFF			;PD0 - PD7 as outputs
  240:	0f ef       	ldi	r16, 0xFF	; 255
-	out		DDRD,r16		//student comment here
+	out		DDRD,r16			;sets pins 0-7 as outputs
  242:	0a b9       	out	0x0a, r16	; 10
-	lds		r16,DATA		//student comment here
+	lds		r16,DATA			;loads the contents of the DATA variable that contain the LCD command
  244:	00 91 0b 06 	lds	r16, 0x060B	; 0x80060b <DATA>
-	out		PORTD,r16		//student comment here
+	out		PORTD,r16			;outputs the contents of the DATA variable to port D
  248:	0b b9       	out	0x0b, r16	; 11
-	ldi		r16,4			//student comment here
+	ldi		r16,4			    ;sets the output to not display on the LCD
  24a:	04 e0       	ldi	r16, 0x04	; 4
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
+	out		PORTB,r16			;output does not display on the LCD
+	call	LCD_Delay			;delays the program
  24c:	05 b9       	out	0x05, r16	; 5
  24e:	04 d0       	rcall	.+8      	; 0x258 <LCD_Delay>
-	ldi		r16,0			//student comment here
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
+	ldi		r16,0			    ;clears the data in port B
+	out		PORTB,r16			;port B cleared
+	call	LCD_Delay			;delays the program
  250:	00 e0       	ldi	r16, 0x00	; 0
  252:	05 b9       	out	0x05, r16	; 5
-	call	UART_On			//student comment here
+	call	UART_On				;re-enables UART
  254:	01 d0       	rcall	.+2      	; 0x258 <LCD_Delay>
  256:	1f c0       	rjmp	.+62     	; 0x296 <UART_On>
 
 00000258 <LCD_Delay>:
-	ret						//student comment here
+	ret						    ;return from subroutine
  258:	0a ef       	ldi	r16, 0xFA	; 250
 
 0000025a <D0>:
 
 LCD_Delay:
-	ldi		r16,0xFA		//student comment here
+	ldi		r16,0xFA			;sets a high value for the delay
  25a:	1f ef       	ldi	r17, 0xFF	; 255
 
 0000025c <D1>:
-D0:	ldi		r17,0xFF		//student comment here
+D0:	ldi		r17,0xFF			;sets a high value for the delay
  25c:	1a 95       	dec	r17
-D1:	dec		r17				//student comment here
+D1:	dec		r17					;decrements r17 continuously until 0 to create delay
  25e:	f1 f7       	brne	.-4      	; 0x25c <D1>
-	brne	D1				//student comment here
-	dec		r16				//student comment here
+	brne	D1				    ;loops back to decrement r17 until 0
+	dec		r16			  		;decrements r16 continuously until 0 to create delay
  260:	0a 95       	dec	r16
-	brne	D0				//student comment here
+	brne	D0			  		;loops back to decrement r16 until 0
  262:	d9 f7       	brne	.-10     	; 0x25a <D0>
-	ret						//student comment here
+	ret						    ;return from subroutine
  264:	08 95       	ret
 
 00000266 <LCD_Write_Data>:
 
 .global LCD_Write_Data
 LCD_Write_Data:
-	call	UART_Off		//student comment here
+	call	UART_Off			;turns off UART
  266:	1d d0       	rcall	.+58     	; 0x2a2 <UART_Off>
  268:	0f ef       	ldi	r16, 0xFF	; 255
-	ldi		r16,0xFF		//student comment here
+	ldi		r16,0xFF			;PD0 - PD7 as outputs
  26a:	0a b9       	out	0x0a, r16	; 10
-	out		DDRD,r16		//student comment here
+	out		DDRD,r16			;sets pins 0-7 as outputs
  26c:	00 91 0b 06 	lds	r16, 0x060B	; 0x80060b <DATA>
-	lds		r16,DATA		//student comment here
-	out		PORTD,r16		//student comment here
+	lds		r16,DATA			;loads the contents of the DATA variable that contain the output
+	out		PORTD,r16			;outputs the contents of the DATA variable to port D
  270:	0b b9       	out	0x0b, r16	; 11
-	ldi		r16,6			//student comment here
-	out		PORTB,r16		//student comment here
-	call	LCD_Delay		//student comment here
+	ldi		r16,6			    ;sets the output needed for the LCD to output to the screen
+	out		PORTB,r16			;registers that the data from port D is to be outputted to the screen
+	call	LCD_Delay			;delays the program
  272:	06 e0       	ldi	r16, 0x06	; 6
-	ldi		r16,0			//student comment here
+	ldi		r16,0			    ;clears the data in port B
  274:	05 b9       	out	0x05, r16	; 5
-	out		PORTB,r16		//student comment here
+	out		PORTB,r16			;port B cleared
  276:	f0 df       	rcall	.-32     	; 0x258 <LCD_Delay>
-	call	LCD_Delay		//student comment here
+	call	LCD_Delay			;delays the program
  278:	00 e0       	ldi	r16, 0x00	; 0
  27a:	05 b9       	out	0x05, r16	; 5
-	call	UART_On			//student comment here
+	call	UART_On				;re-enables UART
  27c:	ed df       	rcall	.-38     	; 0x258 <LCD_Delay>
  27e:	0b c0       	rjmp	.+22     	; 0x296 <UART_On>
-	ret						//student comment here
+	ret						    ;return from subroutine
  280:	08 95       	ret
 
 00000282 <LCD_Read_Data>:
 
 .global LCD_Read_Data
 LCD_Read_Data:
-	call	UART_Off		//student comment here
+	call	UART_Off			;turns off UART
  282:	0f d0       	rcall	.+30     	; 0x2a2 <UART_Off>
-	ldi		r16,0x00		//student comment here
+	ldi		r16,0x00			;PD0 - PD7 as inputs
  284:	00 e0       	ldi	r16, 0x00	; 0
-	out		DDRD,r16		//student comment here
+	out		DDRD,r16			;sets pins 0-7 as inputs
  286:	0a b9       	out	0x0a, r16	; 10
-	out		PORTB,4			//student comment here
+	out		PORTB,4				;LCD does not display anything onto the screen
  288:	45 b8       	out	0x05, r4	; 5
-	in		r16,PORTD		//student comment here
+	in		r16,PORTD			;stores the data in port D to r16
  28a:	0b b1       	in	r16, 0x0b	; 11
-	sts		DATA,r16		//student comment here
+	sts		DATA,r16			;stores that data in the DATA variable
  28c:	00 93 0b 06 	sts	0x060B, r16	; 0x80060b <DATA>
-	out		PORTB,0			//student comment here
+	out		PORTB,0				;clears port B
  290:	05 b8       	out	0x05, r0	; 5
-	call	UART_On			//student comment here
+	call	UART_On				;re-enables UART
  292:	01 c0       	rjmp	.+2      	; 0x296 <UART_On>
  294:	08 95       	ret
 
 00000296 <UART_On>:
-	ret						//student comment here
+	ret						    ;return from subroutine
  296:	02 e0       	ldi	r16, 0x02	; 2
 
 .global UART_On
 UART_On:
-	ldi		r16,2				//student comment here
+	ldi		r16,2				;load 2 into r16
  298:	0a b9       	out	0x0a, r16	; 10
-	out		DDRD,r16			//student comment here
+	out		DDRD,r16			;sets direction of port d to 2
  29a:	08 e1       	ldi	r16, 0x18	; 24
-	ldi		r16,24				//student comment here
+	ldi		r16,24				;loads 24 into r16
  29c:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
-	sts		UCSR0B,r16			//student comment here
+	sts		UCSR0B,r16			;store r16 content into USCR0B
  2a0:	08 95       	ret
 
 000002a2 <UART_Off>:
-	ret							//student comment here
+	ret							;return from subroutine
  2a2:	00 e0       	ldi	r16, 0x00	; 0
 
 .global UART_Off
 UART_Off:
-	ldi	r16,0					//student comment here
+	ldi	r16,0					;loads 0 (or low) into r16
  2a4:	00 93 c1 00 	sts	0x00C1, r16	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7e00c1>
-	sts UCSR0B,r16				//student comment here
+	sts UCSR0B,r16				;loads contents of r16 into UCSR0B in other words sets 
  2a8:	08 95       	ret
 
 000002aa <UART_Clear>:
-	ret							//student comment here
+									;UCSR0B to low which turns off UART
+	ret							;return from subroutine
  2aa:	00 91 c0 00 	lds	r16, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
 
 .global UART_Clear
 UART_Clear:
-	lds		r16,UCSR0A			//student comment here
+	lds		r16,UCSR0A			;load UCSR0A into r16
  2ae:	07 ff       	sbrs	r16, 7
-	sbrs	r16,RXC0			//student comment here
+	sbrs	r16,RXC0			;skip the following return instruction if RXC0 bit is set in r16
  2b0:	08 95       	ret
-	ret							//student comment here
+	ret							;return from subroutine when RXC0 is not set
  2b2:	00 91 c6 00 	lds	r16, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
-	lds		r16,UDR0			//student comment here
+	lds		r16,UDR0			;if previous return did not occur load UDR0 into r16 and try again
  2b6:	f9 cf       	rjmp	.-14     	; 0x2aa <UART_Clear>
 
 000002b8 <UART_Get>:
-	rjmp	UART_Clear			//student comment here
+	rjmp	UART_Clear			;loop over UART_Clear
  2b8:	00 91 c0 00 	lds	r16, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
 
 .global UART_Get
 UART_Get:
-	lds		r16,UCSR0A			//retrieves the status register that checks if there is data in the buffer
+	lds		r16,UCSR0A			;retrieves the status register that checks if there is data in the buffer
  2bc:	07 ff       	sbrs	r16, 7
-	sbrs	r16,RXC0			//skips the next instruction if there is data in the buffer
+	sbrs	r16,RXC0			;skips the next instruction if there is data in the buffer
  2be:	fc cf       	rjmp	.-8      	; 0x2b8 <UART_Get>
-	rjmp	UART_Get			//loops the data retrieval function until there is data in the buffer
+	rjmp	UART_Get			;loops the data retrieval function until there is data in the buffer
  2c0:	00 91 c6 00 	lds	r16, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
-	lds		r16,UDR0			//stores the data in the buffer in r16
+	lds		r16,UDR0			;stores the data in the buffer in r16
  2c4:	00 93 0f 06 	sts	0x060F, r16	; 0x80060f <ASCII>
-	sts		ASCII,r16			//stores the register data into the address pointed to by ASCII
+	sts		ASCII,r16			;stores the register data into the address pointed to by ASCII
  2c8:	08 95       	ret
 
 000002ca <UART_Put>:
-	ret							//end and return from this function
+	ret							;return from subroutine
  2ca:	10 91 c0 00 	lds	r17, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7e00c0>
 
 .global UART_Put
 UART_Put:
-	lds		r17,UCSR0A			//student comment here
+	lds		r17,UCSR0A			;store USCR0A (control status register A) into r17
  2ce:	15 ff       	sbrs	r17, 5
-	sbrs	r17,UDRE0			//student comment here
+	sbrs	r17,UDRE0			;if the UART data register empty bit is set then skip the following
  2d0:	fc cf       	rjmp	.-8      	; 0x2ca <UART_Put>
-	rjmp	UART_Put			//student comment here
+									;relative jump instruction
+	rjmp	UART_Put			;if the UART data register empty bit is not set loop back
  2d2:	00 91 0f 06 	lds	r16, 0x060F	; 0x80060f <ASCII>
-	lds		r16,ASCII			//student comment here
+									;through UART_Put 
+	lds		r16,ASCII			;load what is stored in ASCII to r16
  2d6:	00 93 c6 00 	sts	0x00C6, r16	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7e00c6>
-	sts		UDR0,r16			//student comment here
+	sts		UDR0,r16			;store value in r16 to UDR0
  2da:	08 95       	ret
 
 000002dc <ADC_Get>:
-	ret							//student comment here
+	ret							;return from subroutine
  2dc:	07 ec       	ldi	r16, 0xC7	; 199
 
 .global ADC_Get
 ADC_Get:
-		ldi		r16,0xC7			//student comment here
+		ldi		r16,0xC7	    ;load 0xC7 (RXC0) into r16
  2de:	00 93 7a 00 	sts	0x007A, r16	; 0x80007a <__TEXT_REGION_LENGTH__+0x7e007a>
 
 000002e2 <A2V1>:
-		sts		ADCSRA,r16			//student comment here
+		sts		ADCSRA,r16		;store from r16 into ADCSRA (responsible for enable ADC and
  2e2:	00 91 7a 00 	lds	r16, 0x007A	; 0x80007a <__TEXT_REGION_LENGTH__+0x7e007a>
-A2V1:	lds		r16,ADCSRA			//student comment here
+									;start ADC) to enable ADC
+A2V1:	lds		r16,ADCSRA		;load ADCSRA into r16
  2e6:	06 fd       	sbrc	r16, 6
-		sbrc	r16,ADSC			//student comment here
+		sbrc	r16,ADSC		;check if the start conversion bit has been set on r16, if so 
  2e8:	fc cf       	rjmp	.-8      	; 0x2e2 <A2V1>
-		rjmp 	A2V1				//student comment here
+									;skip otherwise continue to the followign instruction
+		rjmp 	A2V1			;if the start conversion has not been set then loop back to A2V1
  2ea:	00 91 78 00 	lds	r16, 0x0078	; 0x800078 <__TEXT_REGION_LENGTH__+0x7e0078>
-		lds		r16,ADCL			//student comment here
+		lds		r16,ADCL		;load from ADCL (ADC Low) into r16
  2ee:	00 93 1d 06 	sts	0x061D, r16	; 0x80061d <LADC>
-		sts		LADC,r16			//student comment here
+		sts		LADC,r16		;store what is now stored in r16 to LADC (global variable to 
  2f2:	00 91 79 00 	lds	r16, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7e0079>
-		lds		r16,ADCH			//student comment here
+									;hold the low byte of ADC) 
+		lds		r16,ADCH		;load from ADCH (ADC How) into r16
  2f6:	00 93 0c 06 	sts	0x060C, r16	; 0x80060c <HADC>
-		sts		HADC,r16			//student comment here
+		sts		HADC,r16		;store what is now stored in r16 to HADC (global variable to 
  2fa:	08 95       	ret
 
 000002fc <EEPROM_Write>:
-		ret							//student comment here
+									;hold the high byte of ADC)
+		ret						;return from subroutine
  2fc:	f9 99       	sbic	0x1f, 1	; 31
 
 .global EEPROM_Write
 EEPROM_Write:      
 		sbic    EECR,EEPE
  2fe:	fe cf       	rjmp	.-4      	; 0x2fc <EEPROM_Write>
-		rjmp    EEPROM_Write		; Wait for completion of previous write
+		rjmp    EEPROM_Write	;Wait for completion of previous write
  300:	20 91 0e 06 	lds	r18, 0x060E	; 0x80060e <lAddress>
-		lds		r18,lAddress			; Set up address (r18:r17) in address register
+		lds		r18,lAddress	;Set up address (r18:r17) in address register
  304:	10 91 0d 06 	lds	r17, 0x060D	; 0x80060d <hAddress>
-		lds		r17,hAddress 
+		lds		r17,hAddress
  308:	00 91 0a 06 	lds	r16, 0x060A	; 0x80060a <content>
-		lds		r16,content				; Set up data in r16    
+		lds	  	r16,content		;Set up data in r16    
  30c:	22 bd       	out	0x22, r18	; 34
 		out     EEARH, r18      
  30e:	11 bd       	out	0x21, r17	; 33
 		out     EEARL, r17			      
  310:	00 bd       	out	0x20, r16	; 32
-		out     EEDR,r16			; Write data (r16) to Data Register  
+		out     EEDR,r16		;Write data (r16) to Data Register  
  312:	fa 9a       	sbi	0x1f, 2	; 31
-		sbi     EECR,EEMPE			; Write logical one to EEMPE
+		sbi     EECR,EEMPE		;Write logical one to EEMPE
  314:	f9 9a       	sbi	0x1f, 1	; 31
-		sbi     EECR,EEPE			; Start eeprom write by setting EEPE
+		sbi     EECR,EEPE		;Start eeprom write by setting EEPE
  316:	08 95       	ret
 
 00000318 <EEPROM_Read>:
-		ret 
+		ret                     ;return from subroutine
  318:	f9 99       	sbic	0x1f, 1	; 31
 
 .global EEPROM_Read
 EEPROM_Read:					    
 		sbic    EECR,EEPE    
  31a:	fe cf       	rjmp	.-4      	; 0x318 <EEPROM_Read>
-		rjmp    EEPROM_Read		; Wait for completion of previous write
+		rjmp    EEPROM_Read	  	;Wait for completion of previous write
  31c:	20 91 0e 06 	lds	r18, 0x060E	; 0x80060e <lAddress>
-		lds		r18,lAddress		; Set up address (r18:r17) in EEPROM address register
+		lds		r18,lAddress	;Set up address (r18:r17) in EEPROM address register
  320:	10 91 0d 06 	lds	r17, 0x060D	; 0x80060d <hAddress>
 		lds		r17,hAddress
  324:	00 91 0a 06 	lds	r16, 0x060A	; 0x80060a <content>
@@ -613,9 +622,9 @@ EEPROM_Read:
  32a:	11 bd       	out	0x21, r17	; 33
 		out     EEARL, r17		   
  32c:	f8 9a       	sbi	0x1f, 0	; 31
-		sbi     EECR,EERE		; Start eeprom read by writing EERE
+		sbi     EECR,EERE		;Start eeprom read by writing EERE
  32e:	00 b5       	in	r16, 0x20	; 32
-		in      r16,EEDR		; Read data from Data Register
+		in      r16,EEDR	  	;Read data from Data Register
  330:	00 93 0f 06 	sts	0x060F, r16	; 0x80060f <ASCII>
 		sts		ASCII,r16  
  334:	08 95       	ret
@@ -1637,7 +1646,7 @@ void USART(void) {
 /**
 * command interpreter
 */
-void Command(void)					//command interpreter
+void Command(void)					
 {
 	UART_Puts(MS3);
  846:	95 e0       	ldi	r25, 0x05	; 5
@@ -1649,7 +1658,7 @@ void Command(void)					//command interpreter
 		UART_Get();
  84e:	34 dd       	rcall	.-1432   	; 0x2b8 <UART_Get>
 */
-void Command(void)					//command interpreter
+void Command(void)					
 {
 	UART_Puts(MS3);
 	ASCII = '\0';						

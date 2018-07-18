@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <util/delay.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
 const char q1[] = "If there are 6 fish and 3 drown, how many fish are there?";
 const char a1 = '6';
@@ -21,15 +23,9 @@ const char a3 = '9';
 const char q4[] = "A cat is given $6 and a spider $12, how much for you?";
 const char a4 = '3';
 
-
-const char MS1[] = "\r\nECE-412 ATMega328P Tiny OS";
-const char MS2[] = "\r\nby Eugene Rockey Copyright 2018, All Rights Reserved";
-const char MS3[] = "\r\nMenu: (L)CD, (A)DC, (E)EPROM, (U)SART\r\n";
-const char MS4[] = "\r\nReady: ";
-const char MS5[] = "\r\nInvalid Command Try Again...";
-const char MS6[] = "Volts\r";
-const char MS7[] = " F";
-const char teamName[] = "               Four is Better Than Five";
+void LED_Init(void);
+void Correct(void);
+void Incorrect(void);
 
 void LCD_Init(void);			//external Assembly functions
 void UART_Init(void);
@@ -40,6 +36,7 @@ void LCD_Write_Data(void);
 void LCD_Write_Command(void);
 void LCD_Read_Data(void);
 void Mega328P_Init(void);
+void Detect_Press(void);
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
@@ -47,6 +44,21 @@ unsigned char hAddress;			//high byte of address used in EEPROM
 unsigned char lAddress;			//low byte of address used in EEPROM
 unsigned char content;			//content to write in EEPROM
 unsigned int count;				//counter variable
+
+void LED_Init(void) {
+	DDRC = 0x03;
+	return;
+}
+
+void Correct(void) {
+	PORTC = 0x01;
+	return;
+}
+
+void Incorrect(void) {	
+	PORTC = 0x02;
+	return;
+}
 
 /**
 *UART_Puts
@@ -75,26 +87,6 @@ void LCD_Puts(const char *str)
 } // end LCD_Puts
 
 /**
-*Banner
-*Display Tiny OS Banner on Terminal
-*/
-void Banner(void)
-{
-	UART_Puts(MS1);
-	UART_Puts(MS2);
-	UART_Puts(MS4);
-} // end Banner
-
-/**
-*HELP
-*Display available Tiny OS Commands on Terminal
-*/
-void HELP(void)
-{
-	UART_Puts(MS3);
-} // end HELP
-
-/**
 *LCD
 */
 void LCD(void)						//Lite LCD demo
@@ -109,18 +101,23 @@ void LCD(void)						//Lite LCD demo
 	LCD_Write_Command();
 	DATA = 0x0f;					//Display on cursor blinking
 	LCD_Write_Command();
-	LCD_Puts(teamName);
+	LCD_Puts(q1);
 	ASCII = '\0';
+	Incorrect();
 	while (ASCII == '\0') {
 		for (count = 0; count < 40; count ++) {
+			Detect_Press();
 			DATA = 0x18;
 			LCD_Write_Command();
 			_delay_ms(200);
 			
-			asm("lds r16,0xC6"); // check what ASCII value is being stored
-			asm("sts ASCII,r16");
+			Detect_Press();
+
+			//asm("lds r16,0xC6"); // check what ASCII value is being stored
+			//asm("sts ASCII,r16");
 
 			if (ASCII != '\0') {
+				Correct();
 				DATA = 0x01;
 				LCD_Write_Command();
 				return;
@@ -129,6 +126,7 @@ void LCD(void)						//Lite LCD demo
 		DATA = 0x02;
 		LCD_Write_Command();
 	}
+	Correct();
 	return;
 } // end LCD
 
@@ -158,7 +156,6 @@ void USART(void) {
 */
 void Command(void)
 {
-	UART_Puts(MS3);
 	ASCII = '\0';
 	while (ASCII == '\0')
 	{
@@ -175,7 +172,6 @@ void Command(void)
 		USART();
 		break;
 		default:
-		UART_Puts(MS5);
 		break;  			//Add a 'USART' command and subroutine to allow the user to reconfigure the
 		//serial port parameters during runtime. Modify baud rate, # of data bits, parity,
 		//# of stop bits.
@@ -185,13 +181,28 @@ void Command(void)
 /**
 * main
 */
+
 int main(void)
 {
 	Mega328P_Init();
-	Banner();
+	LED_Init();
+
+	int isRed = 0;
+	LCD();
+	while (!(PINB & (1<<7))) {}
 	while (1)
 	{
-		Command();				//infinite command loop
+		if (!(PINB & (1<<7))) {
+			if (isRed == 1) {
+				Correct();
+				isRed = 0;
+			}
+			else if (isRed == 0) {
+				Incorrect();
+				isRed = 1;
+			}
+			while (!(PINB & (1<<7))) {}
+		}
 	}
 } // end Main
 
