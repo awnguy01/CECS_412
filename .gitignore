@@ -1,1 +1,7 @@
 *.atsuo
+*.eep
+*.elf
+*.hex
+*.lss
+*.map
+*.srec
