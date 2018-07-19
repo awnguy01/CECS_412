@@ -32,8 +32,8 @@ int answer; /* answer that the user provides to be checked against respective Ge
              */
 
 void LED_Init(void);
-void Correct(void);
-void Incorrect(void);
+void onCorrect(void);
+void onIncorrect(void);
 
 void LCD_Init(void);			//external Assembly functions
 void UART_Init(void);
@@ -48,12 +48,12 @@ void Detect_Press(void);
 
 void UART_Puts(const char*);
 void LCD_Puts(const char*);
-void LCD(void);
+void LCD(const char*);
 void USART(void);
 void Command(void);
 
 void GenerateQuestionOrder(int[], int);
-void AskQuestion(int[]);
+void AskQuestions(int[]);
 void Swap(int *, int *);
 void PrintQuestionOrder(int[], int);
 void PromptForAnswer(const char[], int);
@@ -66,17 +66,17 @@ unsigned char content;			//content to write in EEPROM
 unsigned int count;				//counter variable
 
 void LED_Init(void) {
-	DDRC = 0x03;
+	DDRC = 0x03;				//Sets data direction of PC0 and PC1 to output to send "high" to LEDs
 	return;
 }
 
-void Correct(void) {
-	PORTC = 0x01;
+void onCorrect(void) {
+	PORTC = 0x01;				//Sends a "high" signal to PC0 and "low" for every other bit in PORTC
 	return;
 }
 
-void Incorrect(void) {	
-	PORTC = 0x02;
+void onIncorrect(void) {	
+	PORTC = 0x02;				//Sends a "high" signal to PC1 and "low" for every other bit in PORTC
 	return;
 }
 
@@ -99,19 +99,23 @@ void UART_Puts(const char *str)
 */
 void LCD_Puts(const char *str)
 {
+	_delay_ms(200);
+	DATA = 0x01;
+	LCD_Write_Command();
+	_delay_ms(5);
+	DATA = 0x06;
+	LCD_Write_Command();
+	_delay_ms(5);
 	while (*str)
 	{
 		DATA = *str++;
 		LCD_Write_Data();
 	}
+	_delay_ms(5);
 } // end LCD_Puts
 
-/**
-*LCD
-*/
-void LCD(void)						//Lite LCD demo
-{
-	DATA = 0x34;					//Sets data bits in LCD
+void LCD_Init() {
+	DATA = 0x38;					//Sets data bits in LCD
 	LCD_Write_Command();
 	DATA = 0x08;					//Clearing display without clearing DDRAM content
 	LCD_Write_Command();
@@ -119,25 +123,30 @@ void LCD(void)						//Lite LCD demo
 	LCD_Write_Command();
 	DATA = 0x06;					//Entry Mode
 	LCD_Write_Command();
-	DATA = 0x0f;					//Display on cursor blinking
+	DATA = 0x0c;					//Display on cursor blinking
 	LCD_Write_Command();
-	LCD_Puts(q1);
+};
+
+/**
+*LCD
+*/
+void LCD(const char q[])						//Lite LCD demo
+{
+	LCD_Puts(q);
 	ASCII = '\0';
-	Incorrect();
 	while (ASCII == '\0') {
 		for (count = 0; count < 40; count ++) {
-			Detect_Press();
+			//Detect_Press();
 			DATA = 0x18;
 			LCD_Write_Command();
 			_delay_ms(200);
 			
-			Detect_Press();
+			//Detect_Press();			//Loads ASCII with 1 if PB7 is "high" (i.e. Pushbutton pressed)
 
-			//asm("lds r16,0xC6"); // check what ASCII value is being stored
-			//asm("sts ASCII,r16");
+			asm("lds r16,0xC6"); // check what ASCII value is being stored
+			asm("sts ASCII,r16");
 
 			if (ASCII != '\0') {
-				Correct();
 				DATA = 0x01;
 				LCD_Write_Command();
 				return;
@@ -146,7 +155,6 @@ void LCD(void)						//Lite LCD demo
 		DATA = 0x02;
 		LCD_Write_Command();
 	}
-	Correct();
 	return;
 } // end LCD
 
@@ -164,7 +172,6 @@ void Command(void)
 	{
 		case 'l':
 		case 'L':
-		LCD();
 		break;
 		case 'u':
 		case 'U':
@@ -226,14 +233,25 @@ void PrintQuestionOrder(int questions[], int n)
  */
 void PromptForAnswer(const char q[], int a)
 {
-  printf("%s\n", q);  // prints question 
-  do {
-    scanf("%d", &answer); // prompts for answer
-
-    if (answer != a) {
-      printf("Wrong try again!"); // indicate if answer wrong
-    }
-  } while (answer != a);
+	ASCII = '\0';
+	onIncorrect();
+	while (ASCII != a + '0') {
+		LCD_Puts(q);
+		while (ASCII == '\0') {
+			UART_Get();
+		}
+		if (ASCII == a + '0') {
+			_delay_ms(200);
+			onCorrect();
+			_delay_ms(1000);
+		} else {
+			LCD_Puts("Wrong try again");
+			_delay_ms(5000);
+			ASCII = '\0';
+			UCSR0A &= ~(1<<7);
+		}
+	}
+	return;
 } // end PromptForAnswer
 
 /**
@@ -243,7 +261,7 @@ void PromptForAnswer(const char q[], int a)
  * TODO: subtract 5 seconds from timer when answer is incorrect
  * TODO: add flavor text?
  */
-void AskQuestion(int questions[]) 
+void AskQuestions(int questions[]) 
 {
   for (int i = 0; i < 4; i++) {
     if (questions[i] == 1) {
@@ -258,6 +276,9 @@ void AskQuestion(int questions[])
       PromptForAnswer(q5, a5);
     }
   }
+  LCD_Puts("Next time...");
+  onCorrect();
+  return;
 } // end AskQuestion
 
 /**
@@ -266,25 +287,26 @@ void AskQuestion(int questions[])
 
 int main(void)
 {
+	srand(time(NULL));
+	GenerateQuestionOrder(questions, 4);
+
 	Mega328P_Init();
 	LED_Init();
-
-	int isRed = 0;
-	LCD();
-	while (!(PINB & (1<<7))) {}
-	while (1)
-	{
-		if (!(PINB & (1<<7))) {
-			if (isRed == 1) {
-				Correct();
-				isRed = 0;
-			}
-			else if (isRed == 0) {
-				Incorrect();
-				isRed = 1;
-			}
-			while (!(PINB & (1<<7))) {}
-		}
-	}
+	LCD_Init();
+	onIncorrect();	//Initially LED red
+	//while (!(PINB & (1<<7))) {}			//Used for debouncing of pushbutton
+	
+	AskQuestions(questions);
+		//if (!(PINB & (1<<7))) {
+			//if (isRed == 1) {
+				//onCorrect();
+				//isRed = 0;
+			//}
+			//else if (isRed == 0) {
+				//onIncorrect();
+				//isRed = 1;
+			//}
+			//while (!(PINB & (1<<7))) {}	//Used for debouncing of pushbutton
+		//}
 } // end Main
 
