@@ -10,18 +10,26 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
 const char q1[] = "If there are 6 fish and 3 drown, how many fish are there?";
-const char a1 = '6';
+const int a1 = 6;
 const char q2[] = "If there are 13 apples and you take 4, how many do you have?";
-const char a2 = '4';
+const int a2 = 4;
 const char q3[] = "If two's company and three's a crowd, what is 4 and 5?";
-const char a3 = '9';
+const int a3 = 9;
 const char q4[] = "A cat is given $6 and a spider $12, how much for you?";
-const char a4 = '3';
+const int a4 = 3;
+const char q5[] = "Among the numbers 1-10, what number is most likely the fattest?";
+const int a5 = 7;
+
+int questions[] = {1, 2, 3, 4, 5}; // array of questions represented by numbers. i.e. 1 = q1 and hence 1 => a1
+int answer; /* answer that the user provides to be checked against respective GeneratedCode digit
+             * TODO: check if users input is going to be a char instead of int
+             */
 
 void LED_Init(void);
 void Correct(void);
@@ -37,6 +45,18 @@ void LCD_Write_Command(void);
 void LCD_Read_Data(void);
 void Mega328P_Init(void);
 void Detect_Press(void);
+
+void UART_Puts(const char*);
+void LCD_Puts(const char*);
+void LCD(void);
+void USART(void);
+void Command(void);
+
+void GenerateQuestionOrder(int[], int);
+void AskQuestion(int[]);
+void Swap(int *, int *);
+void PrintQuestionOrder(int[], int);
+void PromptForAnswer(const char[], int);
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
@@ -130,27 +150,6 @@ void LCD(void)						//Lite LCD demo
 	return;
 } // end LCD
 
-
-/**
-*USART
-*Prompts user to change the Baud rate, character size, parity, stop bits, or exit back to menu
-*/
-void USART(void) {
-	int dataBits = 0;
-	int parity = 0;
-	int stopBits = 0;
-	UART_Puts("\r\nSelect what you would like to change\r\n");
-	UART_Puts("\r\n(1)Baud Rate (2)Character Size (3)Parity (4)Stop bits (ESC) Menu\r\n");
-	UART_Get();
-	switch(ASCII) {
-		case 27:
-		return;
-		default: UART_Puts("Invalid Option");
-		break;
-	}
-	return;
-} // end USART
-
 /**
 * command interpreter
 */
@@ -177,6 +176,89 @@ void Command(void)
 		//# of stop bits.
 	}
 } // end Command
+
+/**
+ * GenerateQuestionOrder
+ * a function to generate a random permutation of an array of question. the first four values in the array will be used
+ * these questions correspond answers and therefore the code. i.e. questions: 2 1 5 3 =>  q2 q1 q5 q3 => a2 a1 a5 a3 => code: 4 6 7 9
+ */
+void GenerateQuestionOrder(int questions[], int n) 
+{
+  // start from the last element and swap one by one. don't need to do it for the first element
+  for (int i = (n - 1); i > 0; i--) {
+    int j = (rand() % (i + 1)); // pick a random index from 0 to i      
+    Swap(&questions[i], &questions[j]); // Swap question[i] with the element at random index
+  }
+} // end GenerateQuestionOrder
+
+/**
+ * Swap
+ * a utility function to swap two integers
+ */
+void Swap(int *a, int *b) 
+{
+  int temp = *a;
+  *a = *b;
+  *b = temp;
+} // end Swap
+
+/**
+ * PrintQuestionOrder
+ * function that 'prints' the questions
+ * the correct code is the corresponding questions and answers
+ * i.e. questions: 2 1 5 3 =>  q2 q1 q5 q3 => a2 a1 a5 a3 => code: 4 6 7 9
+ * TODO: replace with UART_Puts or LCD? most likely remove this?
+ */
+void PrintQuestionOrder(int questions[], int n) 
+{
+  for (int i = 0; i < n; i++) {
+    printf("%d ", questions[i]);
+  }
+
+  printf("\n");
+} // end PrintQuestionOrder
+
+/**
+ * PromptForAnswer
+ * TODO: replace printf and scanf with LCD_Put and LCD_Get
+ * TODO: inside if (answer != a) decrement timer 5 seconds
+ * TODO: add check to while condition for timer > 0
+ */
+void PromptForAnswer(const char q[], int a)
+{
+  printf("%s\n", q);  // prints question 
+  do {
+    scanf("%d", &answer); // prompts for answer
+
+    if (answer != a) {
+      printf("Wrong try again!"); // indicate if answer wrong
+    }
+  } while (answer != a);
+} // end PromptForAnswer
+
+/**
+ * AskQuestion
+ * display question to the user and get answer until time runs out or user enters correct code
+ * only asks the user the first four questions in the shuffled array of questions => four digit code
+ * TODO: subtract 5 seconds from timer when answer is incorrect
+ * TODO: add flavor text?
+ */
+void AskQuestion(int questions[]) 
+{
+  for (int i = 0; i < 4; i++) {
+    if (questions[i] == 1) {
+      PromptForAnswer(q1, a1);
+    } else if (questions[i] == 2) {
+      PromptForAnswer(q2, a2);
+    } else if (questions[i] == 3) {
+      PromptForAnswer(q3, a3);
+    } else if (questions[i] == 4) {
+      PromptForAnswer(q4, a4);
+    } else if (questions[i] == 5) {
+      PromptForAnswer(q5, a5);
+    }
+  }
+} // end AskQuestion
 
 /**
 * main
