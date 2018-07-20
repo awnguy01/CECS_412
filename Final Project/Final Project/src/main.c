@@ -31,7 +31,7 @@ int answer; /* answer that the user provides to be checked against respective Ge
              * TODO: check if users input is going to be a char instead of int
              */
 
-void LED_Init(void);
+void FX_Init(void);
 void onCorrect(void);
 void onIncorrect(void);
 
@@ -51,6 +51,10 @@ void LCD_Puts(const char*);
 void LCD(const char*);
 void USART(void);
 void Command(void);
+void LED_Red(void);
+void LED_Green(void);
+void Buzz_On(void);
+void Buzz_Off(void);
 
 void GenerateQuestionOrder(int[], int);
 void AskQuestions(int[]);
@@ -65,18 +69,55 @@ unsigned char lAddress;			//low byte of address used in EEPROM
 unsigned char content;			//content to write in EEPROM
 unsigned int count;				//counter variable
 
-void LED_Init(void) {
-	DDRC = 0x03;				//Sets data direction of PC0 and PC1 to output to send "high" to LEDs
+void FX_Init(void) {
+	DDRC = 0x07;				//Sets data direction of PC0 and PC1 to output to send "high" to LEDs
+	return;
+}
+
+void LED_Red(void) {
+	PORTC &= ~(1<<0);
+	PORTC |= (1<<1);				//Sends a "high" signal to PC1 and "low" for PC0
+	return;
+}
+
+void LED_Green(void) {
+	PORTC &= ~(1<<1);
+	PORTC |= (1<<0);				//Sends a "high" signal to PC0 and "low" for PC1
+	return;
+}
+
+void Buzz_On(void) {
+	PORTC |= (1<<2);
+	return;
+}
+
+void Buzz_Off(void) {
+	PORTC &= ~(1<<2);
 	return;
 }
 
 void onCorrect(void) {
-	PORTC = 0x01;				//Sends a "high" signal to PC0 and "low" for every other bit in PORTC
+	LED_Green();
 	return;
 }
 
 void onIncorrect(void) {	
-	PORTC = 0x02;				//Sends a "high" signal to PC1 and "low" for every other bit in PORTC
+	LED_Red();
+	Buzz_On();
+	LCD_Puts("WRONG!!! TAKE 5!!!");
+	_delay_ms(1000);
+	Buzz_Off();
+	int i;
+
+	//Counts down from 5 and only changes LCD at the position of the number
+	for (i = 0; i < 4; i++) {
+		DATA = 0x8E;
+		LCD_Write_Command();
+		_delay_ms(200);
+		DATA = 52 - i;
+		LCD_Write_Data();
+		_delay_ms(800);
+	}
 	return;
 }
 
@@ -234,7 +275,7 @@ void PrintQuestionOrder(int questions[], int n)
 void PromptForAnswer(const char q[], int a)
 {
 	ASCII = '\0';
-	onIncorrect();
+	LED_Red();
 	while (ASCII != a + '0') {
 		LCD_Puts(q);
 		while (ASCII == '\0') {
@@ -245,8 +286,7 @@ void PromptForAnswer(const char q[], int a)
 			onCorrect();
 			_delay_ms(1000);
 		} else {
-			LCD_Puts("Wrong try again");
-			_delay_ms(5000);
+			onIncorrect();
 			ASCII = '\0';
 			UCSR0A &= ~(1<<7);
 		}
@@ -291,9 +331,9 @@ int main(void)
 	GenerateQuestionOrder(questions, 4);
 
 	Mega328P_Init();
-	LED_Init();
+	FX_Init();
 	LCD_Init();
-	onIncorrect();	//Initially LED red
+	LED_Red();	//Initially LED red
 	//while (!(PINB & (1<<7))) {}			//Used for debouncing of pushbutton
 	
 	AskQuestions(questions);
