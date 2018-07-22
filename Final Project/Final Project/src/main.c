@@ -15,15 +15,15 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-const char q1[] = "If there are 6 fish and 3 drown, how many fish are there?";
+const char q1[] = "6 fish, 2 drown                         How many live?";
 const int a1 = 6;
-const char q2[] = "If there are 13 apples and you take 4, how many do you have?";
-const int a2 = 4;
-const char q3[] = "If two's company and three's a crowd, what is 4 and 5?";
-const int a3 = 9;
-const char q4[] = "A cat is given $6 and a spider $12, how much for you?";
+const char q2[] = "This is true";
+const int a2 = 1;
+const char q3[] = "I am the center";
+const int a3 = 5;
+const char q4[] = "Cat = $6, Spider                        = $12; You = ?";
 const int a4 = 3;
-const char q5[] = "Among the numbers 1-10, what number is most likely the fattest?";
+const char q5[] = "Which number is                         fattest?";
 const int a5 = 7;
 
 int questions[] = {1, 2, 3, 4, 5}; // array of questions represented by numbers. i.e. 1 = q1 and hence 1 => a1
@@ -164,7 +164,7 @@ void LCD_Init() {
 	LCD_Write_Command();
 	DATA = 0x06;					//Entry Mode
 	LCD_Write_Command();
-	DATA = 0x0c;					//Display on cursor blinking
+	DATA = 0x0c;					//Disable cursor blinking
 	LCD_Write_Command();
 };
 
