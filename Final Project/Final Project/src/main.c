@@ -55,6 +55,7 @@ void USART(void);
 void Command(void);
 void LED_Red(void);
 void LED_Green(void);
+void LED_Off(void);
 void Buzz_On(void);
 void Buzz_Off(void);
 void Set_Seed(void);
@@ -84,6 +85,11 @@ void LED_Red(void) {
 void LED_Green(void) {
 	PORTC &= ~(1<<1);
 	PORTC |= (1<<0);				//Sends a "high" signal to PC0 and "low" for PC1
+	return;
+}
+
+void LED_Off(void) {
+	PORTC &= ~((1<<0)|(1<<1));
 	return;
 }
 
@@ -317,8 +323,13 @@ void AskQuestions(int questions[])
       PromptForAnswer(q5, a5);
     }
   }
-  LCD_Puts("Next time...");
-  onCorrect();
+  LCD_Puts("You live...                                 For now...");
+  while(1) {
+	_delay_ms(500);
+	LED_Green();
+	_delay_ms(500);
+	LED_Off();
+  }
   return;
 } // end AskQuestion
 
