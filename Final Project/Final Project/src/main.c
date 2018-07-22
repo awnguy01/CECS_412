@@ -45,6 +45,8 @@ void LCD_Write_Command(void);
 void LCD_Read_Data(void);
 void Mega328P_Init(void);
 void Detect_Press(void);
+void EEPROM_Write(void);
+void EEPROM_Read(void);
 
 void UART_Puts(const char*);
 void LCD_Puts(const char*);
@@ -55,6 +57,7 @@ void LED_Red(void);
 void LED_Green(void);
 void Buzz_On(void);
 void Buzz_Off(void);
+void Set_Seed(void);
 
 void GenerateQuestionOrder(int[], int);
 void AskQuestions(int[]);
@@ -64,8 +67,6 @@ void PromptForAnswer(const char[], int);
 
 unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
-unsigned char hAddress;			//high byte of address used in EEPROM
-unsigned char lAddress;			//low byte of address used in EEPROM
 unsigned char content;			//content to write in EEPROM
 unsigned int count;				//counter variable
 
@@ -232,11 +233,11 @@ void Command(void)
  */
 void GenerateQuestionOrder(int questions[], int n) 
 {
-  // start from the last element and swap one by one. don't need to do it for the first element
-  for (int i = (n - 1); i > 0; i--) {
-    int j = (rand() % (i + 1)); // pick a random index from 0 to i      
-    Swap(&questions[i], &questions[j]); // Swap question[i] with the element at random index
-  }
+	// start from the last element and swap one by one. don't need to do it for the first element
+	for (int i = (n - 1); i > 0; i--) {
+		int j = (rand() % (i + 1)); // pick a random index from 0 to i      
+		Swap(&questions[i], &questions[j]); // Swap question[i] with the element at random index
+	}
 } // end GenerateQuestionOrder
 
 /**
@@ -321,32 +322,38 @@ void AskQuestions(int questions[])
   return;
 } // end AskQuestion
 
+void Set_Seed(void) {
+	EEPROM_Read();
+
+	if (ASCII == '\0') {
+		ASCII = 0x01;
+	} else {
+		asm("lds r16,ASCII");
+		asm("inc r16");
+		asm("sts ASCII,r16");
+	}
+	_delay_us(100);
+	EEPROM_Write();
+	_delay_us(100);
+	srand(ASCII);
+}
+
 /**
 * main
 */
 
 int main(void)
 {
-	srand(time(NULL));
-	GenerateQuestionOrder(questions, 4);
-
 	Mega328P_Init();
 	FX_Init();
 	LCD_Init();
 	LED_Red();	//Initially LED red
-	//while (!(PINB & (1<<7))) {}			//Used for debouncing of pushbutton
 	
+	Set_Seed(); //Sets the SRAND seed using an incremented value stored in EEPROM
+	
+	GenerateQuestionOrder(questions, 4);
+
 	AskQuestions(questions);
-		//if (!(PINB & (1<<7))) {
-			//if (isRed == 1) {
-				//onCorrect();
-				//isRed = 0;
-			//}
-			//else if (isRed == 0) {
-				//onIncorrect();
-				//isRed = 1;
-			//}
-			//while (!(PINB & (1<<7))) {}	//Used for debouncing of pushbutton
-		//}
+		
 } // end Main
 
