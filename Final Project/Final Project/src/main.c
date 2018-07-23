@@ -45,8 +45,9 @@ void LCD_Write_Command(void);
 void LCD_Read_Data(void);
 void Mega328P_Init(void);
 void Detect_Press(void);
-void EEPROM_Write(void);
-void EEPROM_Read(void);
+//void EEPROM_Write(void);
+//void EEPROM_Read(void);
+void Countdown_Interrupt_Init(void);
 
 void UART_Puts(const char*);
 void LCD_Puts(const char*);
@@ -58,7 +59,7 @@ void LED_Green(void);
 void LED_Off(void);
 void Buzz_On(void);
 void Buzz_Off(void);
-void Set_Seed(void);
+//void Set_Seed(void);
 
 void GenerateQuestionOrder(int[], int);
 void AskQuestions(int[]);
@@ -70,6 +71,14 @@ unsigned char ASCII;			//shared I/O variable with Assembly
 unsigned char DATA;				//shared internal variable with Assembly
 unsigned char content;			//content to write in EEPROM
 unsigned int count;				//counter variable
+
+ISR(TIMER1_OVF_vect) {
+	PORTC |= (1<<2);
+	_delay_ms(200);
+	PORTC &= ~(1<<2);
+	TCNT1L = 0x00;
+	TCNT1H = 0xD3;
+}
 
 void FX_Init(void) {
 	DDRC = 0x07;				//Sets data direction of PC0 and PC1 to output to send "high" to LEDs
@@ -323,6 +332,9 @@ void AskQuestions(int questions[])
       PromptForAnswer(q5, a5);
     }
   }
+
+  cli();
+  
   LCD_Puts("You live...                                 For now...");
   while(1) {
 	_delay_ms(500);
@@ -330,23 +342,31 @@ void AskQuestions(int questions[])
 	_delay_ms(500);
 	LED_Off();
   }
+  
   return;
 } // end AskQuestion
 
-void Set_Seed(void) {
-	EEPROM_Read();
+//void Set_Seed(void) {
+	//EEPROM_Read();
+//
+	//if (ASCII == '\0') {
+		//ASCII = 0x01;
+	//} else {
+		//asm("lds r16,ASCII");
+		//asm("inc r16");
+		//asm("sts ASCII,r16");
+	//}
+	//_delay_us(100);
+	//EEPROM_Write();
+	//_delay_us(100);
+	//srand(ASCII);
+//}
 
-	if (ASCII == '\0') {
-		ASCII = 0x01;
-	} else {
-		asm("lds r16,ASCII");
-		asm("inc r16");
-		asm("sts ASCII,r16");
-	}
-	_delay_us(100);
-	EEPROM_Write();
-	_delay_us(100);
-	srand(ASCII);
+void Countdown_Interrupt_Init(void) {
+	TIMSK1 |= (1<<0);
+	TCCR1B |= (1 << CS10) | (1<<CS12);
+	TCNT1L = 0x00;
+	TCNT1H = 0xD3;
 }
 
 /**
@@ -360,11 +380,22 @@ int main(void)
 	LCD_Init();
 	LED_Red();	//Initially LED red
 	
-	Set_Seed(); //Sets the SRAND seed using an incremented value stored in EEPROM
+	LCD_Puts("Play my game...                         Defuse or Die >D");
 	
+	Countdown_Interrupt_Init();
+	unsigned int seed = 0;
+	
+	while ((PINB & (1<<7))) {
+		seed++;
+		if (seed == 1000) {
+			seed = 0;
+		}
+	}  
+	
+	sei();
+	srand(seed);
 	GenerateQuestionOrder(questions, 4);
 
 	AskQuestions(questions);
-		
 } // end Main
 

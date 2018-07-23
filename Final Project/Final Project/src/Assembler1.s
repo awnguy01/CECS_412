@@ -167,7 +167,7 @@ UART_Put:
 	sts		UDR0,r16			;store value in r16 to UDR0
 	ret							;return from subroutine
 		
-.global EEPROM_Write
+/*.global EEPROM_Write
 EEPROM_Write:      
 		sbic    EECR,EEPE
 		rjmp    EEPROM_Write	;Wait for completion of previous write
@@ -192,7 +192,7 @@ EEPROM_Read:
 		sbi     EECR,EERE		;Start eeprom read by writing EERE
 		in      r16,EEDR	  	;Read data from Data Register
 		sts		ASCII,r16  
-		ret                     ;return from subroutine
+		ret                     ;return from subroutine*/
 		
 		.end
 
