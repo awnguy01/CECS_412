@@ -1,7 +1,12 @@
 /**
  * \file
  *
- * \brief ATMEGA328PB_XPLAINED_PRO board LEDs support package.
+ * \brief ATMEGA328P_XPLAINED_MINI board header file.
+ *
+ * This file contains definitions and services related to the features of the
+ * Xplained Mini board.
+ *
+ * To use this board, define BOARD= ATMEGA328P_XPLAINED_MINI.
  *
  * Copyright (c) 2015 Atmel Corporation. All rights reserved.
  *
@@ -43,35 +48,33 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
+#ifndef _ATMEGA328P_XPLAINED_MINI_
+#define _ATMEGA328P_XPLAINED_MINI_
+#include "compiler.h"
 
-#ifndef _LED_H_
-#define _LED_H_
+# include "led.h"
 
-#include "gpio.h"
+#define MCU_SOC_NAME        "ATMEGA328P"
+#define BOARD_NAME          "ATMEGA328P_XPLAINED_MINI"
 
- 
-/*! \brief Turns off the specified LEDs.
- *
- * \param led_gpio LED to turn off (LEDx_GPIO).
- *
- * \note The pins of the specified LEDs are set to GPIO output mode.
- */
-#define LED_Off(led_gpio)     gpio_set_pin_low(led_gpio)
 
-/*! \brief Turns on the specified LEDs.
- *
- * \param led_gpio LED to turn on (LEDx_GPIO).
- *
- * \note The pins of the specified LEDs are set to GPIO output mode.
- */
-#define LED_On(led_gpio)      gpio_set_pin_high(led_gpio)
+#define LED0_GPIO                       IOPORT_CREATE_PIN(PORTB, 5)
+#define LED0                            LED0_GPIO
 
-/*! \brief Toggles the specified LEDs.
- *
- * \param led_gpio LED to toggle (LEDx_GPIO).
- *
- * \note The pins of the specified LEDs are set to GPIO output mode.
- */
-#define LED_Toggle(led_gpio)  gpio_toggle_pin(led_gpio)
+//! Number of LEDs.
+#define LED_COUNT                       1
 
-#endif /* _LED_H_ */
+#define GPIO_PUSH_BUTTON_0              IOPORT_CREATE_PIN(PORTB, 7)
+
+//! \name Communication interfaces
+//@{
+#define TWID_SDA                        IOPORT_CREATE_PIN(PORTC, 4)
+#define TWID_SCL                        IOPORT_CREATE_PIN(PORTC, 5)
+#define USART_RX                        IOPORT_CREATE_PIN(PORTD, 0)
+#define USART_TX                        IOPORT_CREATE_PIN(PORTD, 1)
+#define SPI_SS_A                        IOPORT_CREATE_PIN(PORTB, 2)
+#define SPI_MOSI                        IOPORT_CREATE_PIN(PORTB, 3)
+#define SPI_MISO                        IOPORT_CREATE_PIN(PORTB, 4)
+#define SPI_SCK                         IOPORT_CREATE_PIN(PORTB, 5)
+//@}
+#endif  /* _ATMEGA328P_XPLAINED_MINI_ */

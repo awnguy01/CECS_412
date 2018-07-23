@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief MEGA-328PB Xplained board configuration template
+ * \brief ATMEGA328P_XPLAINED_PRO board LEDs support package.
  *
- * Copyright (C) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,7 +44,34 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef _LED_H_
+#define _LED_H_
 
-#endif // CONF_BOARD_H
+#include "gpio.h"
+
+ 
+/*! \brief Turns off the specified LEDs.
+ *
+ * \param led_gpio LED to turn off (LEDx_GPIO).
+ *
+ * \note The pins of the specified LEDs are set to GPIO output mode.
+ */
+#define LED_Off(led_gpio)     gpio_set_pin_low(led_gpio)
+
+/*! \brief Turns on the specified LEDs.
+ *
+ * \param led_gpio LED to turn on (LEDx_GPIO).
+ *
+ * \note The pins of the specified LEDs are set to GPIO output mode.
+ */
+#define LED_On(led_gpio)      gpio_set_pin_high(led_gpio)
+
+/*! \brief Toggles the specified LEDs.
+ *
+ * \param led_gpio LED to toggle (LEDx_GPIO).
+ *
+ * \note The pins of the specified LEDs are set to GPIO output mode.
+ */
+#define LED_Toggle(led_gpio)  gpio_toggle_pin(led_gpio)
+
+#endif /* _LED_H_ */

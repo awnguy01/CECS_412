@@ -1,14 +1,9 @@
 /**
  * \file
  *
- * \brief ATMEGA328PB_XPLAINED_MINI board header file.
+ * \brief MEGA-328P Xplained board configuration template
  *
- * This file contains definitions and services related to the features of the
- * Xplained Mini board.
- *
- * To use this board, define BOARD= ATMEGA328PB_XPLAINED_MINI.
- *
- * Copyright (c) 2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -48,33 +43,8 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
-#ifndef _ATMEGA328PB_XPLAINED_MINI_
-#define _ATMEGA328PB_XPLAINED_MINI_
-#include "compiler.h"
 
-# include "led.h"
+#ifndef CONF_BOARD_H
+#define CONF_BOARD_H
 
-#define MCU_SOC_NAME        "ATMEGA328PB"
-#define BOARD_NAME          "ATMEGA328PB_XPLAINED_MINI"
-
-
-#define LED0_GPIO                       IOPORT_CREATE_PIN(PORTB, 5)
-#define LED0                            LED0_GPIO
-
-//! Number of LEDs.
-#define LED_COUNT                       1
-
-#define GPIO_PUSH_BUTTON_0              IOPORT_CREATE_PIN(PORTB, 7)
-
-//! \name Communication interfaces
-//@{
-#define TWID_SDA                        IOPORT_CREATE_PIN(PORTC, 4)
-#define TWID_SCL                        IOPORT_CREATE_PIN(PORTC, 5)
-#define USART_RX                        IOPORT_CREATE_PIN(PORTD, 0)
-#define USART_TX                        IOPORT_CREATE_PIN(PORTD, 1)
-#define SPI_SS_A                        IOPORT_CREATE_PIN(PORTB, 2)
-#define SPI_MOSI                        IOPORT_CREATE_PIN(PORTB, 3)
-#define SPI_MISO                        IOPORT_CREATE_PIN(PORTB, 4)
-#define SPI_SCK                         IOPORT_CREATE_PIN(PORTB, 5)
-//@}
-#endif  /* _ATMEGA328PB_XPLAINED_MINI_ */
+#endif // CONF_BOARD_H
