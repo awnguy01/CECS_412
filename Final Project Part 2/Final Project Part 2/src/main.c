@@ -15,23 +15,42 @@ void LED_Digit_6(void);
 void LED_Digit_7(void);
 void LED_Digit_8(void);
 void LED_Digit_9(void);
-
-#define LED_D1()
-#define LED_D2()
+void LED_Disp_1(void);
+void LED_Disp_2(void);
+void Tens_Display(void);
+void Ones_Display(void);
 
 void Mega328P_Init(void);
-void Seven_Seg_Init(void);
+void FX_Init(void);
 void UART_Put(void);
 void KeyPad_Init (void);
 void Read_Row_States (void);
 void KeyPad_Scan (void);
 void Countdown_Interrupt_Init(void);
 
-int countdown = 60;
+int countdown = 5;
+int go = 1;
 unsigned char ASCII;
 unsigned char DATA;
 
+ISR (TIMER2_OVF_vect) {
+	Ones_Display();
+	Tens_Display();
+	TCNT2 = 0xFF;
+}
+
 ISR (TIMER1_OVF_vect) {
+	PORTB |= (1<<3);
+	if (countdown > 0) {
+		countdown--;
+	}
+	else {
+		PORTB |= (1<<4);
+		TIMSK1 = 0;
+	}
+	PORTB |= (1<<3);
+	_delay_ms(200);
+	PORTB &= ~(1<<3);
 	TCNT1L = 0x00;
 	TCNT1H = 0xD3;
 }
@@ -77,21 +96,31 @@ void LED_Digit_9() {
 	PORTB |= (1<<2);
 }
 
-void Seven_Seg_Init(void) {
-	DDRD = 0xFF;
-	DDRB = 0x07;
+void LED_Disp_1() {
+	PORTB &= ~(1<<0);
+	PORTB |= (1<<1);
 }
 
-//void Digit_1(void) {
-//PORTD = 0x09;
-//}
+void LED_Disp_2() {
+	PORTB &= ~(1<<1);
+	PORTB |= (1<<0);
+}
+
+void FX_Init(void) {
+	DDRD = 0xFF;
+	DDRB = 0xFF;
+}
 
 
 void Countdown_Interrupt_Init(void) {
 	TIMSK1 |= (1<<0);
+	TIMSK2 |= (1<<0);
 	TCCR1B |= (1 << CS10) | (1<<CS12);
+	TCCR2B |= (1<<0) | (1<<1) | (1<<2);
 	TCNT1L = 0x00;
 	TCNT1H = 0xD3;
+	TCNT2 = 0xFF;
+	PORTB = 0x00;
 }
 
 
@@ -162,32 +191,87 @@ void KeyPad_Scan(void) {
 	col = NULL;
 }
 
+void Tens_Display(void) {
+	LED_Disp_1();
+	switch((countdown / 10) % 10) {
+		case 0:
+		LED_Digit_0();
+		break;
+		case 1:
+		LED_Digit_1();
+		break;
+		case 2:
+		LED_Digit_2();
+		break;
+		case 3:
+		LED_Digit_3();
+		break;
+		case 4:
+		LED_Digit_4();
+		break;
+		case 5:
+		LED_Digit_5();
+		break;
+		case 6:
+		LED_Digit_6();
+		break;
+		case 7:
+		LED_Digit_7();
+		break;
+		case 8:
+		LED_Digit_8();
+		break;
+		case 9:
+		LED_Digit_9();
+		break;
+	}
+	_delay_ms(2);
+}
+
+void Ones_Display(void) {
+	LED_Disp_2();
+	switch(countdown % 10) {
+		case 0:
+		LED_Digit_0();
+		break;
+		case 1:
+		LED_Digit_1();
+		break;
+		case 2:
+		LED_Digit_2();
+		break;
+		case 3:
+		LED_Digit_3();
+		break;
+		case 4:
+		LED_Digit_4();
+		break;
+		case 5:
+		LED_Digit_5();
+		break;
+		case 6:
+		LED_Digit_6();
+		break;
+		case 7:
+		LED_Digit_7();
+		break;
+		case 8:
+		LED_Digit_8();
+		break;
+		case 9:
+		LED_Digit_9();
+		break;
+	}
+	_delay_ms(2);
+}
+
 int main(void) {
 	Mega328P_Init();
 	//KeyPad_Init();
-	Seven_Seg_Init();
-	PORTB = 0x00;
-	while(1) {
-		LED_Digit_9();
-		_delay_ms(1000);
-		LED_Digit_8();
-		_delay_ms(1000);
-		LED_Digit_7();
-		_delay_ms(1000);
-		LED_Digit_6();
-		_delay_ms(1000);
-		LED_Digit_5();
-		_delay_ms(1000);
-		LED_Digit_4();
-		_delay_ms(1000);
-		LED_Digit_3();
-		_delay_ms(1000);
-		LED_Digit_2();
-		_delay_ms(1000);
-		LED_Digit_1();
-		_delay_ms(1000);
-		LED_Digit_0();
-		_delay_ms(1000);
+	FX_Init();
+	Countdown_Interrupt_Init();
+	sei();
+	while(go) {
 	}
 	//while(1) {
 	//KeyPad_Scan();

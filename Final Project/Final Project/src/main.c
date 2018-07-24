@@ -80,6 +80,13 @@ ISR(TIMER1_OVF_vect) {
 	TCNT1H = 0xD3;
 }
 
+ISR(PCINT1_vect) {
+	LCD_Puts("Time's Up!                              Goodbye >D");
+	while(1) {
+
+	}
+}
+
 void FX_Init(void) {
 	DDRC = 0x07;				//Sets data direction of PC0 and PC1 to output to send "high" to LEDs
 	return;
@@ -367,6 +374,9 @@ void Countdown_Interrupt_Init(void) {
 	TCCR1B |= (1 << CS10) | (1<<CS12);
 	TCNT1L = 0x00;
 	TCNT1H = 0xD3;
+	
+	//Enables the interrupt for the countdown end from board 2
+	PCMSK1 |= (1<<2);
 }
 
 /**
@@ -383,6 +393,7 @@ int main(void)
 	LCD_Puts("Play my game...                         Defuse or Die >D");
 	
 	Countdown_Interrupt_Init();
+	sei();
 	unsigned int seed = 0;
 	
 	while ((PINB & (1<<7))) {
@@ -391,8 +402,7 @@ int main(void)
 			seed = 0;
 		}
 	}  
-	
-	sei();
+
 	srand(seed);
 	GenerateQuestionOrder(questions, 4);
 
