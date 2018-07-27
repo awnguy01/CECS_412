@@ -43,6 +43,7 @@ ISR (TIMER2_OVF_vect) {
 ISR (TIMER1_OVF_vect) {
 	//Interrupt that executes each segment
 	PORTB |= (1<<3);
+	//Counts down only if the start signal pin is high
 	if (PINC & (1<<0)) {
 		if (countdown > 0) {
 			countdown--;
