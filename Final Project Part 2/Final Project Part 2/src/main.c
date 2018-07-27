@@ -28,33 +28,38 @@ void Read_Row_States (void);
 void KeyPad_Scan (void);
 void Countdown_Interrupt_Init(void);
 
-int countdown = 5;
+int countdown = 60;
 int go = 1;
 unsigned char ASCII;
 unsigned char DATA;
 
 ISR (TIMER2_OVF_vect) {
+	//Interrupt that flickers the 7-segment LED
 	Ones_Display();
 	Tens_Display();
 	TCNT2 = 0xFF;
 }
 
 ISR (TIMER1_OVF_vect) {
+	//Interrupt that executes each segment
 	PORTB |= (1<<3);
-	if (countdown > 0) {
-		countdown--;
+	if (PINC & (1<<0)) {
+		if (countdown > 0) {
+			countdown--;
+		}
+		else {
+			PORTB |= (1<<4);
+			TIMSK1 = 0;
+		}
+		PORTB |= (1<<3);
+		_delay_ms(200);
 	}
-	else {
-		PORTB |= (1<<4);
-		TIMSK1 = 0;
-	}
-	PORTB |= (1<<3);
-	_delay_ms(200);
 	PORTB &= ~(1<<3);
 	TCNT1L = 0x00;
 	TCNT1H = 0xD3;
 }
 
+//Digit segment mapping for 4-digit 7-segment LED
 void LED_Digit_0() {
 	PORTD = 0xBD;
 	PORTB |= (1<<2);
@@ -107,8 +112,12 @@ void LED_Disp_2() {
 }
 
 void FX_Init(void) {
+	//Initialize the timer ports to output
 	DDRD = 0xFF;
 	DDRB = 0xFF;
+	//Initialize the the start signal port to input
+	DDRC &= ~(1<<5);
+	PORTC &= ~(1<<5);
 }
 
 
@@ -121,74 +130,6 @@ void Countdown_Interrupt_Init(void) {
 	TCNT1H = 0xD3;
 	TCNT2 = 0xFF;
 	PORTB = 0x00;
-}
-
-
-//row and column mapped keypad grid with placeholder 0s
-const int KeyPadGrid[4][4] =
-{
-	{0, 0, 0, 0},
-	{0, 1, 2, 3},
-	{0, 4, 5, 6},
-	{0, 7, 8, 9}
-};
-
-const int row2Vals[] = {0, 4, 5, 6};
-const int row3Vals[] = {0, 7, 8, 9};
-
-int row;
-int col;
-int connected = 0;
-
-void KeyPad_Init (void) {
-
-	DDRD &= ~((1<<0) | (1<<1) | (1<<2)); //Keypad rows set to input
-	DDRD |= (1<<3) | (1<<4) | (1<<5);	//Keypad columns set to output
-	PORTD = 0x00;	//Keypad all set to low
-}
-
-void Read_Row_States(void) {
-	if ((PIND & (1<<0)) != 0) {
-		row = 0;
-		connected = 1;
-		} else if ((PIND & (1<<1)) != 0) {
-		row = 1;
-		connected = 1;
-		} else if ((PIND & (1<<2)) != 0) {
-		row = 2;
-		connected = 1;
-		} else {
-		connected = 0;
-	}
-}
-
-void KeyPad_Scan(void) {
-	int key = 0;
-	while (connected == 0) {
-		if (connected == 0) {
-			//Sending high from col 3 and scanning for matching row
-			PORTD = 8;
-			col = 3;
-			Read_Row_States();
-		}
-		if (connected == 0) {
-			//Sending high from col 2 and scanning for matching row
-			PORTD = 16;
-			col = 2;
-			Read_Row_States();
-		}
-		if (connected == 0) {
-			//Sending high from col 1 and scanning for matching row
-			PORTD = 32;
-			col = 1;
-			Read_Row_States();
-		}
-	}
-	key = KeyPadGrid[row][col];
-	ASCII = key + '0';
-	UART_Put();
-	row = NULL;
-	col = NULL;
 }
 
 void Tens_Display(void) {
@@ -266,14 +207,15 @@ void Ones_Display(void) {
 }
 
 int main(void) {
-	Mega328P_Init();
-	//KeyPad_Init();
-	FX_Init();
-	Countdown_Interrupt_Init();
-	sei();
-	while(go) {
+	Mega328P_Init();	//Initializes the board
+	FX_Init();	//Sets up the output pins to power the 4-digit 7-segment display and buzzer
+	Countdown_Interrupt_Init();	//Sets up the interrupts for the countdown
+	PORTC &= ~(1<<0);	//Clears PC0
+	DDRC &= ~(1<<0); //Sets PC0 as input
+
+	while(PINC & (1<<0)) {} //waits for start signal from other board
+
+	sei();	//Enables the interrupts for the 4-digit 7-segment display and buzzer countdown
+	while(1) {
 	}
-	//while(1) {
-	//KeyPad_Scan();
-	//}
 }

@@ -6,7 +6,6 @@
 
 
 .section ".data"				;start of the data section
-.equ	PINB,0X03
 .equ	DDRB,0x04				;DDRB (Data Direction Register B) set to 0x04 (00000100) which 
 									;sets pin 2 as an output
 .equ	DDRD,0x0A				;DDRD (Data Direction Register D) set to 0x0A (00001010) which
@@ -24,18 +23,6 @@
 .equ	UDRE0,0x05				;data register "empty" flag
 .equ	DIDR0,0x7E				;specifies the address offset of the digital input disable register 0
 .equ	DIDR1,0x7F				;specifies the address offset of the digital input disable register 1
-.equ	EECR,0x1F				;EECR (EEPROM Control Register) which is used to control the operation 
-									;of the EEPROM
-.equ	EEDR,0x20				;EEDR (EEPROM Data Register) which contains the data that is to be stored
-.equ	EEARL,0x21				;EEARL (EEPROM Address Register Low) which is the address of the low byte
-.equ	EEARH,0x22				;EEARH (EEPROM Address Register High) which is the address of the high byte
-.equ	EERE,0					;EERE (EEPROM Read Enable) which is used to read from the EEPROM
-.equ	EEPE,1					;EEPR (EEPROM Write Enable) which is used to write to the EEPROM - this 
-									;must be 1 otherwise no writing will occur
-.equ	EEMPE,2					;EEMPE (EEPROM Master Write Enable) which is used to determine if EEPE 
-								;causes the EEPROM to be written to
-.equ	EERIE,3					;EERIE (EEPROM Ready Interrupt Enable) which enables the EEPROM ready
-								;interrupt if the I bit in the SREG is set
 
 .global ASCII					;global variable intended to hold a character byte
 .global DATA					;global variable intended to hold any data byte
@@ -62,14 +49,6 @@ Mega328P_Init:
 		ldi r16,0xFF	  		;determines which AINx pins to disable
 		sts DIDR1,r16	  		;disables both AINx pins
 		ret				      	;return from subroutine
-	
-
-.global Detect_Press
-Detect_Press:
-	ldi		r16,1
-	sbis	PINB,7
-	sts		ASCII,r16
-	ret
 
 .global LCD_Write_Command
 LCD_Write_Command:
@@ -150,8 +129,6 @@ UART_Clear:
 .global UART_Get
 UART_Get:
 	lds		r16,UCSR0A			;retrieves the status register that checks if there is data in the buffer
-	sbrs	r16,RXC0			;skips the next instruction if there is data in the buffer
-	rjmp	UART_Get			;loops the data retrieval function until there is data in the buffer
 	lds		r16,UDR0			;stores the data in the buffer in r16
 	sts		ASCII,r16			;stores the register data into the address pointed to by ASCII
 	ret							;return from subroutine
@@ -166,33 +143,6 @@ UART_Put:
 	lds		r16,ASCII			;load what is stored in ASCII to r16
 	sts		UDR0,r16			;store value in r16 to UDR0
 	ret							;return from subroutine
-		
-/*.global EEPROM_Write
-EEPROM_Write:      
-		sbic    EECR,EEPE
-		rjmp    EEPROM_Write	;Wait for completion of previous write
-		ldi		r18,0x05			;Set up address (r18:r17) in address register
-		ldi		r17,0x00
-		lds	  	r16,ASCII		;Set up data in r16    
-		out     EEARH, r18      
-		out     EEARL, r17			      
-		out     EEDR,r16		;Write data (r16) to Data Register  
-		sbi     EECR,EEMPE		;Write logical one to EEMPE
-		sbi     EECR,EEPE		;Start eeprom write by setting EEPE
-		ret                     ;return from subroutine
-
-.global EEPROM_Read
-EEPROM_Read:					    
-		sbic    EECR,EEPE    
-		rjmp    EEPROM_Read	  	;Wait for completion of previous write
-		ldi		r18,5	;Set up address (r18:r17) in EEPROM address register
-		ldi		r17,0
-		out     EEARH, r18   
-		out     EEARL, r17		   
-		sbi     EECR,EERE		;Start eeprom read by writing EERE
-		in      r16,EEDR	  	;Read data from Data Register
-		sts		ASCII,r16  
-		ret                     ;return from subroutine*/
 		
 		.end
 

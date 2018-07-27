@@ -15,15 +15,15 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-const char q1[] = "6 fish, 2 drown                         How many live?";
+const char q1[] = "6 FISH, 2 DROWN                         HOW MANY LIVE?";
 const int a1 = 6;
-const char q2[] = "This is true";
+const char q2[] = "WHAT IS TRUE";
 const int a2 = 1;
-const char q3[] = "I am the center";
+const char q3[] = "I AM THE CENTER";
 const int a3 = 5;
-const char q4[] = "Cat = $6, Spider                        = $12; You = ?";
+const char q4[] = "CAT = $6, SPIDER                        = $12; YOU = ?";
 const int a4 = 3;
-const char q5[] = "Which number is                         fattest?";
+const char q5[] = "WHICH NUMBER IS                         FATTEST?";
 const int a5 = 7;
 
 int questions[] = {1, 2, 3, 4, 5}; // array of questions represented by numbers. i.e. 1 = q1 and hence 1 => a1
@@ -44,10 +44,6 @@ void LCD_Write_Data(void);
 void LCD_Write_Command(void);
 void LCD_Read_Data(void);
 void Mega328P_Init(void);
-void Detect_Press(void);
-//void EEPROM_Write(void);
-//void EEPROM_Read(void);
-void Countdown_Interrupt_Init(void);
 
 void UART_Puts(const char*);
 void LCD_Puts(const char*);
@@ -57,9 +53,6 @@ void Command(void);
 void LED_Red(void);
 void LED_Green(void);
 void LED_Off(void);
-void Buzz_On(void);
-void Buzz_Off(void);
-//void Set_Seed(void);
 
 void GenerateQuestionOrder(int[], int);
 void AskQuestions(int[]);
@@ -72,23 +65,12 @@ unsigned char DATA;				//shared internal variable with Assembly
 unsigned char content;			//content to write in EEPROM
 unsigned int count;				//counter variable
 
-ISR(TIMER1_OVF_vect) {
-	PORTC |= (1<<2);
-	_delay_ms(200);
-	PORTC &= ~(1<<2);
-	TCNT1L = 0x00;
-	TCNT1H = 0xD3;
-}
-
-ISR(PCINT1_vect) {
-	LCD_Puts("Time's Up!                              Goodbye >D");
-	while(1) {
-
-	}
-}
-
 void FX_Init(void) {
-	DDRC = 0x07;				//Sets data direction of PC0 and PC1 to output to send "high" to LEDs
+	DDRC = 0x03;				//Sets data direction of PC0 and PC1 to output to send "high" to LEDs
+	DDRC |= (1<<5);				//Sets pin 5 to output in order to send a high signal to second board to start countdown
+	PORTC &= ~(1<<5);
+	
+	DDRB &= ~(1<<4);			//Reads kill signal from board 2 to stop the program
 	return;
 }
 
@@ -109,16 +91,6 @@ void LED_Off(void) {
 	return;
 }
 
-void Buzz_On(void) {
-	PORTC |= (1<<2);
-	return;
-}
-
-void Buzz_Off(void) {
-	PORTC &= ~(1<<2);
-	return;
-}
-
 void onCorrect(void) {
 	LED_Green();
 	return;
@@ -126,10 +98,8 @@ void onCorrect(void) {
 
 void onIncorrect(void) {	
 	LED_Red();
-	Buzz_On();
 	LCD_Puts("WRONG!!! TAKE 5!!!");
 	_delay_ms(1000);
-	Buzz_Off();
 	int i;
 
 	//Counts down from 5 and only changes LCD at the position of the number
@@ -190,37 +160,6 @@ void LCD_Init() {
 	DATA = 0x0c;					//Disable cursor blinking
 	LCD_Write_Command();
 };
-
-/**
-*LCD
-*/
-void LCD(const char q[])						//Lite LCD demo
-{
-	LCD_Puts(q);
-	ASCII = '\0';
-	while (ASCII == '\0') {
-		for (count = 0; count < 40; count ++) {
-			//Detect_Press();
-			DATA = 0x18;
-			LCD_Write_Command();
-			_delay_ms(200);
-			
-			//Detect_Press();			//Loads ASCII with 1 if PB7 is "high" (i.e. Pushbutton pressed)
-
-			asm("lds r16,0xC6"); // check what ASCII value is being stored
-			asm("sts ASCII,r16");
-
-			if (ASCII != '\0') {
-				DATA = 0x01;
-				LCD_Write_Command();
-				return;
-			}
-		}
-		DATA = 0x02;
-		LCD_Write_Command();
-	}
-	return;
-} // end LCD
 
 /**
 * command interpreter
@@ -302,6 +241,11 @@ void PromptForAnswer(const char q[], int a)
 	while (ASCII != a + '0') {
 		LCD_Puts(q);
 		while (ASCII == '\0') {
+			if (PINB & (1<<4)) {
+				LCD_Puts("   TIME'S UP!                              GOODBYE >D");
+				while(1) {
+				}
+			}
 			UART_Get();
 		}
 		if (ASCII == a + '0') {
@@ -340,9 +284,9 @@ void AskQuestions(int questions[])
     }
   }
 
-  cli();
+  PORTC &= ~(1<<5);	//Sends the end signal to second board
   
-  LCD_Puts("You live...                                 For now...");
+  LCD_Puts("YOU LIVE...                                 FOR NOW...");
   while(1) {
 	_delay_ms(500);
 	LED_Green();
@@ -369,16 +313,6 @@ void AskQuestions(int questions[])
 	//srand(ASCII);
 //}
 
-void Countdown_Interrupt_Init(void) {
-	TIMSK1 |= (1<<0);
-	TCCR1B |= (1 << CS10) | (1<<CS12);
-	TCNT1L = 0x00;
-	TCNT1H = 0xD3;
-	
-	//Enables the interrupt for the countdown end from board 2
-	PCMSK1 |= (1<<2);
-}
-
 /**
 * main
 */
@@ -390,10 +324,8 @@ int main(void)
 	LCD_Init();
 	LED_Red();	//Initially LED red
 	
-	LCD_Puts("Play my game...                         Defuse or Die >D");
+	LCD_Puts("PLAY MY GAME...                         DEFUSE OR DIE >D");
 	
-	Countdown_Interrupt_Init();
-	sei();
 	unsigned int seed = 0;
 	
 	while ((PINB & (1<<7))) {
@@ -401,8 +333,8 @@ int main(void)
 		if (seed == 1000) {
 			seed = 0;
 		}
-	}  
-
+	} 
+	PORTC |= (1<<5);	//Sends the start signal to second board
 	srand(seed);
 	GenerateQuestionOrder(questions, 4);
 
